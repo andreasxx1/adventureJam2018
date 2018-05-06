@@ -24,9 +24,9 @@
 					frame: 0, 
 					isRotated: false 
 				};
-				_.each(Object.keys(this.states), key => {
-					if (!this.activeState) { this.activeState = this.states[key]; }
-				});
+				if (!this.activeState) { 
+					this.activeState = this.states[name]; 
+				}
 			});
 			//
 			this.initialize();

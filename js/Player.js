@@ -7,7 +7,6 @@
 	class Player extends GameObject {
 		draw() {
 			super.draw();
-			console.log('and also log this');
 		}
 	}
 
