@@ -58,7 +58,6 @@
 
 	//////////
 
-	// Game related functions here.
 	function Game(w, h, g) {
 		this.width = w;
 		this.height = h;
