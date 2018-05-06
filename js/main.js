@@ -7,12 +7,16 @@
 	// Globals;
 	window.KEY = { SP: 32, LE: 37, UP: 38, RI: 39, DO: 40, A: 65, D: 68, X: 88 };
 	window.DICTIONARY = { DRAW: 'draw', UPDATE: 'update' };
+	//
 	window.SCREEN = { MENU: 'menu', BACKGROUND: 'background', LEVEL1: 'level_1', INTERFACE: 'interface' };
 	window.START_SCREEN = SCREEN.LEVEL1;
-	window.ASSETS_FOLDER = 'assets/';
-	window.SPRITES = ['player_idle'];
-	window.SPRITE_FORMAT = '.png';
+	//
 	window.OPTIONS = { PLAYER: { w: 50, h: 50, index: 0 } };
+	//
+	window.ASSETS_FOLDER = 'assets/';
+	window.SPRITE_FORMAT = '.png';
+	window.SPRITES = ['player_idle']; // Include sprite names here (must be .png);
+	//
 	window.game = game;
 
 	// Getting smooth animation interval function provided by the target browser.

@@ -2,7 +2,7 @@
 	'use strict';
 
 	class GameObject {
-		constructor({id, x, y, w, h, states, screens, index}) {
+		constructor({ id, x, y, w, h, states, screens, index }) {
 			this.id = id;
 			this.x = x;
 			this.y = y;
@@ -15,7 +15,6 @@
 			this.isActive = true; 	 // Affects object interaction with the world.
 			this.activeState = null;
 			this.isBoundingboxVisible = false;
-			console.log(id, x, y, w, h, states, screens, index);
 			//
 			_.each(Object.keys(states), name => {
 				this.states[name] = { 
