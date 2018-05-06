@@ -1,38 +1,22 @@
 (function() {
 	'use strict';
 
-	window.GameObject = GameObject;
-
-	function GameObject({ id, x, y, w, h, states, screens, index }) {
-		this.id = id;
-		this.x = x;
-		this.y = y;
-		this.width = w;
-		this.height = h;
-		this.index = index || index === 0 ? index : -1; // Drawing index (the bigger the closer).
-		this.screens = screens;
-		this.isVisible = true; 	 // Affects object visibility.
-		this.isActive = true; 	 // Affects object interaction with the world.
-		this.states = [];
-		this.activeState = null;
-		this.isBoundingboxVisible = false;
-
-		//
-		this.initialize = initialize;
-		this.draw = draw;
-		this.update = update;
-		this.getObjectDimentions = getObjectDimentions;
-		this.getActiveSprite = getActiveSprite;
-		this.setstates = setstates;
-		this.animate = animate;
-
-		//////////
-
-		this.initialize();
-
-		//////////
-
-		function initialize() {
+	class GameObject {
+		constructor({id, x, y, w, h, states, screens, index}) {
+			this.id = id;
+			this.x = x;
+			this.y = y;
+			this.width = w;
+			this.height = h;
+			this.screens = screens;
+			this.states = [];
+			this.index = index || index === 0 ? index : -1; // Drawing index (the bigger the closer).
+			this.isVisible = true; 	 // Affects object visibility.
+			this.isActive = true; 	 // Affects object interaction with the world.
+			this.activeState = null;
+			this.isBoundingboxVisible = false;
+			console.log(id, x, y, w, h, states, screens, index);
+			//
 			_.each(Object.keys(states), name => {
 				this.states[name] = { 
 					sprite: name, 
@@ -44,11 +28,19 @@
 				_.each(Object.keys(this.states), key => {
 					if (!this.activeState) { this.activeState = this.states[key]; }
 				});
-				this.animate();
 			});
+			//
+			this.initialize();
+
 		}
 
-		function draw() {
+		//////////
+
+		initialize() {
+			this.animate();
+		}
+
+		draw() {
 			if (this.isActive && this.activeState) {
 				if (this.isVisible) {	
 					//  
@@ -83,26 +75,26 @@
 			}
 		}
 
-		function update() {
+		update() {
 			if (this.isActive && this.activeState) {
 
 			}
 		}
 
-		function getObjectDimentions() {
+		getObjectDimentions() {
 			const img = this.getActiveSprite();
-			const spw = img.width / this.activeState.frames;
-			const sph = img.height;
+			const spw = img ? img.width / this.activeState.frames : 0;
+			const sph = img ? img.height : 0;
 			//
 			this.width = spw;
 			this.height = sph;
 		}
 
-		function getActiveSprite() {
+		getActiveSprite() {
 			return this.activeState ? game.sprites[this.activeState.sprite] : null;
 		}
 
-		function setstates(state) {
+		setstates(state) {
 			if (this.states[state]) {
 				this.activeState = this.states[state];
 			} else {
@@ -112,7 +104,7 @@
 
 		// Animation
 
-		function animate() {
+		animate() {
 			const state = this.activeState;
 			state.frame = 0;
 			if (this.animationLoop) { clear(this.animationLoop); }
@@ -122,10 +114,12 @@
 				} else {
 					state.frame = 0;
 				}
-			}, this.activeState.tpf)
+			}, this.activeState.tpf); // time per frame
 		}
 
 	}
+
+	window.GameObject = GameObject;
 
 })();
 

@@ -61,7 +61,7 @@
 	function Game(w, h, g) {
 		this.width = w;
 		this.height = h;
-		this.g = g;
+		this.gravity = g;
 		this.pressedKeys = [];
 		this.world = [];
 		this.screens = [];
@@ -91,7 +91,6 @@
 	}
 
 	function start() {
-		console.log('GAME START');
 		this.initialize();
 		this.update();
 		this.draw();
