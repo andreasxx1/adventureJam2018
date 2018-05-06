@@ -1,20 +1,22 @@
 (function() { // Anonymous function to wrap our code and protect our scope from polution.
 	'use strict'; // Add some rules/errors on bad javascript practices or that I believe.
 
-	// Configuration consts.
+	// Configuration constants here.
 	const KEY = { SP: 32, LE: 37, UP: 38, RI: 39, DO: 40, A: 65, D: 68, X: 88 };
 	const DICTIONARY = { DRAW: 'draw', UPDATE: 'update' };
 	const SCREEN = { MENU: 'menu', BACKGROUND: 'background', LEVEL1: 'level_1', INTERFACE: 'interface' };
 	const START_SCREEN = SCREEN.LEVEL1;
-	const ASSETS = 'assets/'; // assets folder name;
+	const ASSETS_FOLDER = 'assets/';
 	const SPRITES = ['player_idle'];
 	const SPRITE_FORMAT = '.png';
+	const OPTIONS = { PLAYER: { w: 50, h: 50, index: 0 } };
 
 	// Game instance.
 	const game = new Game(800, 600, 0.5);
 
 	// Globals;
 	window.game = game;
+	window.OPTIONS = OPTIONS;
 	window.KEY = KEY;
 	window.DICTIONARY = DICTIONARY;
 	window.SCREEN = SCREEN;
@@ -49,7 +51,9 @@
 		$(document).keyup(e => { game.pressedKeys[e.which] = false; });
 
 		// 
-		game.start();
+		game.load().then(() => {
+			game.start();
+		});
 	});
 
 	//////////
@@ -74,6 +78,7 @@
 		this.execOnActiveObjects = execOnActiveObjects;
 		this.createObject = createObject;
 		this.reArrangeWorld = reArrangeWorld;
+		this.clearCanvas = clearCanvas;
 		//
 	};
 
@@ -87,6 +92,7 @@
 	}
 
 	function start() {
+		console.log('GAME START');
 		this.initialize();
 		this.update();
 		this.draw();
@@ -98,6 +104,7 @@
 	}
 
 	function draw() {
+		this.clearCanvas();
 		this.execOnActiveObjects(DICTIONARY.DRAW);
 		requestAnimFrame(() => { this.draw(); }); // requestAnimFrame uses delta time and adapts the frame rate for a smooth drawing.
 	}
@@ -129,18 +136,22 @@
 
 	function load() {
 		return new Promise(resolve => {
-			_.each(SPRITES, spriteName => {
+			_.each(SPRITES, (spriteName, index) => {
 				if (!game.sprites.some((v, key) => {
 					return key === spriteName;
 				})) {
 					game.sprites[spriteName] = new Image();
-					game.sprites[spriteName].src = ASSETS + spriteName + SPRITE_FORMAT;
+					game.sprites[spriteName].src = ASSETS_FOLDER + spriteName + SPRITE_FORMAT;
 				}
-				if (game.sprites.length >= SPRITES.length) {
+				if (index+1 >= SPRITES.length) {
 					resolve();
 				}
 			});
 		});
+	}
+
+	function clearCanvas() {
+		this.context.clearRect(0, 0, this.width, this.height);
 	}
 
 })(); // Self invoked function to start our code.
