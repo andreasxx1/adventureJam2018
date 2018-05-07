@@ -5,7 +5,7 @@
 	const game = new Game(800, 600, 0.5);
 
 	// Globals;
-	window.KEY = { SP: 32, LE: 37, UP: 38, RI: 39, DO: 40, A: 65, D: 68, X: 88 };
+	window.KEY = { SP: 32, LE: 37, UP: 38, RI: 39, DO: 40, A: 65, D: 68, X: 88, SH: 16};
 	window.DICTIONARY = { DRAW: 'draw', UPDATE: 'update' };
 	//
 	window.SCREEN = { MENU: 'menu', BACKGROUND: 'background', LEVEL1: 'level_1', INTERFACE: 'interface' };
@@ -19,8 +19,9 @@
 	//
 	window.game = game;
 
+
 	// Getting smooth animation interval function provided by the target browser.
-	window.requestAnimFrame = (function() { 
+	window.requestAnimFrame = (function() {
 		return window.requestAnimationFrame ||
 		       window.webkitRequestAnimationFrame ||
 		       window.mozRequestAnimationFrame ||
@@ -33,7 +34,7 @@
 	//////////
 
 	// Jquery document ready (this code executes after the HTML is fully loaded).
-	$(function() { 
+	$(function() {
 		// Getting canvas object from HTML and setting it's context to "2d", context is just one of the canvas APIs also possible to set it to "WebGL".
 		game.canvas = document.querySelectorAll("canvas")[0];
 		game.context = game.canvas.getContext("2d");
@@ -46,7 +47,7 @@
 		$(document).keydown(e => { game.pressedKeys[e.which] = true; });
 		$(document).keyup(e => { game.pressedKeys[e.which] = false; });
 
-		// 
+		//
 		game.load().then(() => {
 			game.start();
 		});
@@ -55,6 +56,3 @@
 	//////////
 
 })(); // Self invoked function to start our code.
-
-
-
