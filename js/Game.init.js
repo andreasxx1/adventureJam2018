@@ -53,7 +53,7 @@
 		});
 	});
 
-	// Temporal for testing functions here.
+	// Temporal testing functions here.
 
 	function setTestScreenButtons() {
 		const buttons = [];
