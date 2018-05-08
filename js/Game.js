@@ -7,22 +7,13 @@
 			this.gravity = g;
 			this.pressedKeys = [];
 			this.world = [];
-			this.screens = [];
 			this.activeScreens = [];
 			this.sprites = [];
-		}
-
-		initialize() {
-			this.setScreens();
-		}
-
-		setScreens() {
-			Object.keys(SCREEN).map((key, value) => { this.screens[key] = value; });
-			this.activeScreens.push(START_SCREEN);
+			this.constructors = {};
+			this.sm = new ScreenManager(); // Class below
 		}
 
 		start() {
-			this.initialize();
 			this.update();
 			this.draw();
 		}
@@ -40,10 +31,8 @@
 
 		execOnActiveObjects(fName) {
 			_.each(this.world, object => {
-				if (object.screens.some(scr => {
-					return this.activeScreens.some(actScr => {
-						return actScr === scr;
-					});
+				if (object.getScreens().some(screen => {
+					return screen === this.sm.getActiveScreen();
 				})) {
 					object[fName]();
 				}
@@ -84,6 +73,50 @@
 		}
 
 	};
+
+	class ScreenManager {
+		constructor() {
+			this.screens = [];
+			this.activeScreen = null;
+			this.lastActiveScreen = null;
+			//
+			this.initialize();
+		}
+		
+		initialize() {
+			Object.keys(SCREEN).map(key => { this.setScreen(SCREEN[key]); });
+			this.go(START_SCREEN);
+		}
+
+		go(screen) {
+			this.setActiveScreen(screen);
+		}
+
+		setScreen(newScreen) {
+			if (!this.screens.some(screen => {
+				return screen === newScreen;
+			})) {
+				this.screens.push(newScreen);
+			}
+		}
+
+		getScreens() {
+			return this.screens;
+		}
+
+		getActiveScreen() {
+			return this.activeScreen;
+		}
+
+		setActiveScreen(screen) {
+			this.lastActiveScreen = this.activeScreen;
+			this.activeScreen = screen;
+		}
+
+		backToLastActiveScreen() {
+			this.activeScreen = this.lastActiveScreen;
+		}
+	}
 
 	window.Game = Game;
 

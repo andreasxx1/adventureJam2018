@@ -2,20 +2,21 @@
 	'use strict';
 
 	class GameObject {
-		constructor({ id, x, y, w, h, states, screens, index }) {
-			this.id = id;
-			this.x = x;
-			this.y = y;
-			this.width = w;
-			this.height = h;
-			this.screens = screens;
+		constructor({ id, x, y, w, h, states, screens, index, isInstanciated }) {
+			this.id = id || 'gameObject';
+			this.x = x || 0;
+			this.y = y || 0;
+			this.width = w || 0;
+			this.height = h || 0;
+			this.screens = screens; // screens where the object will be active [array].
 			this.states = [];
 			this.index = index || index === 0 ? index : -1; // Drawing index (the bigger the closer).
 			this.isVisible = true; 	 // Affects object visibility.
 			this.isActive = true; 	 // Affects object interaction with the world.
 			this.activeState = null;
 			this.isBoundingboxVisible = false;
-			//
+			this.isInstanciated = isInstanciated || true;
+			// Setting states
 			_.each(Object.keys(states), name => {
 				this.states[name] = { 
 					sprite: name, 
@@ -25,7 +26,7 @@
 					isRotated: false 
 				};
 				if (!this.activeState) { 
-					this.activeState = this.states[name]; 
+					this.activeState = this.states[name];
 				}
 			});
 			//
@@ -36,7 +37,10 @@
 		//////////
 
 		initialize() {
-			this.animate();
+			if (this.isInstanciated) {
+				game.createObject(this);
+				this.animate();
+			}
 		}
 
 		draw() {
@@ -101,6 +105,10 @@
 			}
 		}
 
+		getScreens() {
+			return this.screens;
+		}
+
 		// Animation
 
 		animate() {
@@ -118,7 +126,7 @@
 
 	}
 
-	window.GameObject = GameObject;
+	game.constructors.GameObject = GameObject;
 
 })();
 
