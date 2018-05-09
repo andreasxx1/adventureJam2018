@@ -42,12 +42,10 @@
 		//
 		game.load() // Loading assets here
 		.then(() => {
-
 			return init();
 		})
 		.then(() => {
 			// temporal for testing screens easily.
-
 			setTestScreenButtons();
 		})
 		.then(() => {
@@ -67,7 +65,7 @@
 				const buttonText = button.firstChild.nodeValue;
 				if (buttonText === screen) {
 					button.addEventListener('click', () => {
-						game.screenManager.go(buttonText);
+						game.sm.go(buttonText);
 					});
 				}
 			});
