@@ -49,11 +49,7 @@
 		}
 
 		reArrangeWorld() {
-			this.world.sort(function(a, b) {
-				if (a.index > b.index) { return 1; }
-				if (a.index < b.index) { return -1; }
-				return 0;
-			});
+			_.sortBy(this.world, a => {'index'});
 		}
 
 		load() {
@@ -63,9 +59,9 @@
 				Object.keys(SPRITE).map(key => { spriteNames.push(SPRITE[key]); });
 
 				_.each(spriteNames, (spriteName, index) => {
-					if (!game.sprites.some((v, key) => {
-						return key === spriteName;
-					})) {
+
+					///lodash version 3 lines
+					if (!_.has(game.sprites, spriteName)){
 						game.sprites[spriteName] = new Image();
 						game.sprites[spriteName].src = ASSETS_FOLDER + spriteName + SPRITE_FORMAT;
 					}
