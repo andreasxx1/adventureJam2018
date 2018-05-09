@@ -19,6 +19,8 @@
 			game.instantiate(options.player.id, options.player.constructor, parameters);
 			
 			//
+			game.sm.go(SCREEN.LEVEL1);
+			//
 			resolve();
 		});
 	}
