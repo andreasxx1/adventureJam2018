@@ -45,11 +45,7 @@
 		}
 
 		reArrangeWorld() {
-			this.world.sort(function(a, b) {
-				if (a.index > b.index) { return 1; }
-				if (a.index < b.index) { return -1; }
-				return 0;
-			});
+			_.sortBy(this.world, a => { a.index});
 		}
 
 		load() {
