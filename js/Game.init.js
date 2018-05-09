@@ -17,8 +17,7 @@
 			const parameters = _.assign(options.player, { states, screens });
 			//
 			game.instantiate(options.player.id, options.player.constructor, parameters);
-
-			console.log(game.player);
+			
 			//
 			resolve();
 		});
