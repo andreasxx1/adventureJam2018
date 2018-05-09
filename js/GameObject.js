@@ -99,7 +99,7 @@
 			return this.activeState ? game.sprites[this.activeState.sprite] : null;
 		}
 
-		setstates(state) {
+		setStates(state) {
 			if (this.states[state]) {
 				this.activeState = this.states[state];
 			} else {
