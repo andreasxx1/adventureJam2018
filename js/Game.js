@@ -45,18 +45,28 @@
 		}
 
 		reArrangeWorld() {
-			_.sortBy(this.world, a => { a.index});
+			_.sortBy(this.world, a => {'index'});
 		}
 
 		load() {
 			return new Promise(resolve => {
 				_.each(SPRITES, (spriteName, index) => {
-					if (!game.sprites.some((v, key) => {
+
+					///lodash version 3 lines
+					if (!_.has(game.sprites, spriteName)){
+						game.sprites[spriteName] = new Image();
+						game.sprites[spriteName].src = ASSETS_FOLDER + spriteName + SPRITE_FORMAT;
+					}
+
+					///Javascript version 4 lines and a lambda
+					/*
+					game.sprites.some((v, key) => {
 						return key === spriteName;
 					})) {
 						game.sprites[spriteName] = new Image();
 						game.sprites[spriteName].src = ASSETS_FOLDER + spriteName + SPRITE_FORMAT;
 					}
+					*/
 					if (index+1 >= SPRITES.length) {
 						resolve();
 					}
