@@ -2,10 +2,8 @@
   'use strict';
 
   const GameObject = game.constructors.GameObject;
-
-  function round(val){
-    Math.round(val)
-  }
+  let abs = common.abs
+  const round = common.round
 
   class Vector{
 		constructor(x,y){
@@ -27,39 +25,31 @@
 			if(vec.y !== undefined) this.y -= vec.y;
       return this
 		}
+    static dist(vec1, vec2){
+      return vec2.copy().sub(vec1)
+    }
 		mag(){
 			return Math.sqrt(this.x * this.x + this.y * this.y)
 		}
 		mul(scalar){
-      if(scalar !== undefined) this.x *= scalar, this.y *= scalar;
+      if(scalar !== NaN) this.x *= scalar, this.y *= scalar;
       return this
 		}
     div(scalar){
-      if(vec.x !== undefined) this.x /= scalar,  this.y /= scalar;
+      if(scalar !== NaN) this.x /= scalar,  this.y /= scalar;
       return this
     }
 	}
 
   class Collider{
-    constructor({id, x,y,walkSpeed,runSpeed,jump}){
-      this.objRef = id
-      this.pos = new Vector(this.x, this.y);
+    constructor({id, x, y, w, h, weight}){
+      this.id = id
+      this.weight = weight,
+      this.floorId = '',
+      this.pos = new Vector(x, y);
       this.vel = new Vector(0,0);
       this.acc = new Vector(0,0);
-      this.grav = 1.5;
-      this.walkSpeed = walkSpeed;
-      this.runSpeed = runSpeed;
-      this.jump = jump;
-      this.isOnGround = false;
-      this.coolDown = null;
-      this.fric = 0.9;
-      this.floor = game.height;
-      this.walls = [0, game.width-this.width];
-      this.collider = {
-        type: 'circle',
-        mode: 'center',
-        radius: 20
-      }
+      this.dim = new Vector(w || 50, h || 50);
     }
   }
 
@@ -69,32 +59,62 @@
       this.Collider = Collider
       //
       this.world = {
-        floor: game.width,
-        walls: [],
-        airDrag: 0.85,
-        groundDrag: 0.8
+        floor: ['main-floor'],
+        walls: ['left-wall', 'right-floor'],
+        obstacles: [],
+        airDrag: 0.95,
+        groundDrag: 0.95,
+        grav: 10
       }
-      this.gameObjects = []
-      this.physicalWorld = []
+      this.physicalWorld = [
+        new Collider({
+          id: 'main-floor',
+          x: -5000,
+          y: game.height,
+          w: 10000,
+          h: 10000,
+          weight: -1
+        }),
+        new Collider({
+          id: 'left-wall',
+          x: -10000,
+          y: game.height - 5000,
+          w: 10000,
+          h: 10000,
+          weight: -1
+        }),
+        new Collider({
+          id: 'right-wall',
+          x: game.width,
+          y: game.height - 5000,
+          w: 10000,
+          h: 10000,
+          weight: -1
+        }),
+        new Collider({
+          id: 'platform',
+          x: 0,
+          y: game.height -100,
+          w: 100,
+          h: 100,
+          weight: -1
+        })
+      ]
     }
-    hello(){
-      return 'hello phy'
-    }
-    addToPhysicalWorld(obj, settings){
-      if(obj instanceof GameObject){
+    addToPhysicalWorld({gameObj, x, y, w, h, weight}){
+      if(gameObj instanceof GameObject){
         ///
         this.physicalWorld.push(new Collider({
-          id: obj.id,
-          x: 0,
-          y: 0,
-          walkSpeed: settings.walkSpeed,
-          runSpeed: settings.runSpeed,
-          jump: settings.jump,
-          dash: settings.dashDist
+          id: gameObj.id,
+          x: x || 0,
+          y: y || 0,
+          w: w || 50,
+          h: h || 50,
+          weight: weight || 1
         }))
         ///
-        return ((gameObject) =>{
-          return this.update(gameObject)
+        return ( () =>{
+          return this.update(gameObj.id)
         }).bind(this)
 
       }
@@ -102,91 +122,126 @@
     }
     getCol(id){
       let col = _.find(this.physicalWorld,((o)=> o.id === id));
-      if( !col ) throw 'trying to move a non-exsisting object';
+      if( !col ){
+        throw 'trying to move a non-exsisting object';
+      }
       return col;
     }
-    walkLeft(id){
+    Left(id, speed){
       let col = this.getCol(id)
-      col.acc.add({x: -col.walkSpeed})
+      col.acc.add({x: -speed})
     }
-    runLeft(id){
+    Right(id, speed){
       let col = this.getCol(id)
-      col.acc.add({x: -col.runSpeed })
+      col.acc.add({x: speed})
     }
-    walkRight(id){
+    Jump(id, height){
       let col = this.getCol(id)
-      col.acc.add({x: col.walkSpeed })
+      col.acc.add({y: -height })
     }
-    runRight(id){
-      let col = this.getCol(id)
-      col.acc.add({x: col.runSpeed })
+    collideWithObjects(col){
+      ///collide with all other object in the physical world
     }
-    jump(id){
-      let col = this.getCol(id)
-      col.acc.add({y: -col.jump })
-    }
-    isOnGround(col){
-
-    }
-    addAirDrag(){
-
-    }
-    addGroundDrag(){
-
-    }
-    collide(col, vel){
-      return vel.copy()
-    }
-    floor(position, velocity){
-      let vel = velocity.copy()
-      if(round(position.y) === round(this.world.floor)){
-        ///clip to ground if only small bounce
-        if(vel.y < 0.1){
-          vel.y = 0;
+    collideWithImmovableObjects(col){
+      let touch = ''
+      _.forEach(this.physicalWorld, obj => {
+        if(obj.id !== col.id && obj.weight === -1){
+          touch += Physics.collision('imm', col, obj)
         }
-      }else if(position.y < this.world.floor){
-        //object already in floor
-        vel.y = this.world.floor - position.y
-      }else if(position.y + vel.y < this.world.floor){
-        ///object above floor do nothing
-      }else if(position.y + vel.y > this.world.floor){
-        /// will go through floor
-        vel.y = this.world.floor - position.y
-      }else if(col.y + vel.y === this.world.floor){
-        ///is going to land on floor, do nothing
-      }else{
-        console.log(col)
-        throw 'unhandled floor logic see collision object above'
-      }
-      return vel
+      })
+      col.floorId = touch
     }
-    walls(col, vel){
-      return vel
-    }
-    update(id, delta){
-      let col = this.getCol(id)
-      let vel = col.vel.mul(delta)
-      ///collisions with other gameObjects
-      vel = this.collide(col.pos, vel)
-      ///clip to floor
-      vel = this.floor(col.pos, vel)
-      ///clip to walls
-      vel = this.walls(col.pos, vel)
-      ///update position
-      col.pos.add(vel)
-      ///
-      ///gravity
-      col.acc.add(col.grav)
-      ///friction
-      this.isOnGround()
-      ? this.addAirDrag(col)
-      : this.addGroundDrag(col)
-      ///update speeds and reset all accelerations
-      vel.add(col.acc)
-      col.vel = vel;
-      col.acc = new Vector(0,0);
 
-      return col.pos
+    update(id){
+      ///quickfix local static delta of 1000/60
+      let delta = 1000/60;
+
+      ///fix any collisions and change velocity if nessessary
+
+      let col = this.getCol(id)
+      col.vel.div(delta)
+      ///collisions with other gameObjects
+      this.collideWithObjects(col)
+      ///collide with non movable objects
+      this.collideWithImmovableObjects(col)
+      ///update position
+      col.pos.add(col.vel)
+      col.vel.mul(delta)
+
+
+      ///add all global forces
+
+      ///gravity
+      col.acc.add({y: this.world.grav})
+      ///update speeds and reset all accelerations
+      col.vel.add(col.acc)
+      col.acc = new Vector(0,0);
+      /// add drag and friction
+      col.vel.x *= this.world.airDrag
+      if(this.isOnFloor(col)){
+        col.vel.x *= this.world.groundDrag
+      }
+      return col.pos.copy()
+    }
+
+    static collision(mode, col1, col2){
+      let p1 = col1.pos.copy(),
+          p2 = col2.pos.copy(),
+          v1 = col1.vel.copy(),
+          v2 = col2.vel.copy(),
+          c1 = {x: p1.x+v1.x, y: p1.y+v1.y,
+                w: col1.dim.x, h: col1.dim.y},
+          c2 = {x: p2.x+v2.x, y: p2.y+v2.y,
+                w: col2.dim.x, h: col2.dim.y},
+          x1 = ((c1.x + c1.w) < c2.x),
+          x2 = (c1.x > (c2.x + c2.w)),
+          y1 = ((c1.y + c1.h) < c2.y),
+          y2 = (c1.y > (c2.y + c2.h)),
+          coll = !(x1 || x2) && !(y1 || y2),
+          touch = ''
+
+      if(coll && mode == 'imm'){
+        let cen1 = new Vector( c1.x+c1.w/2, c1.y+c1.h/2)
+        let cen2 = new Vector( c2.x+c2.w/2, c2.y+c2.h/2)
+        let to1 = Vector.dist(cen2, cen1)
+
+
+        if(abs(to1.x) > abs(to1.y)){
+          if(to1.x > 0){///colliding with right wall
+            if(p1.x > (p2.x + c2.w)) v1.x = p1.x - (p2.x + c2.w)
+            if(round(p1.x,3) === round((p2.x + c2.w),3)) v1.x = 0
+            if(p1.x < (p2.x + c2.w)){
+              v1.x = ((p2.x+c2.w) - p1.x)
+              console.log('if you see this message then you have found the glitch')
+            }
+          }else{///colliding with left wall
+            if((p1.x + c1.w) < p2.x) v1.x = p2.x - (p1.x + c1.w)
+            if(round(p1.x + c1.w,3) === round(p2.x,3)) v1.x = 0
+            if((p1.x + c1.w) > p2.x) v1.x = ((p1.x+c1.w) - p2.x)
+          }
+        }else{
+          if(to1.y > 0){
+            ///no cieling collision yet
+          }else{
+            if((p1.y + c1.h) < p2.y) v1.y = p2.y - (p1.y + c1.h)
+            if(round((p1.y + c1.h),3) === round(p2.y,3)) v1.y = 0
+            if((p1.y + c1.h) > p2.y) v1.y = (p1.y + c1.h) - p2.y
+            touch = col2.id
+          }
+        }
+        col1.vel = v1
+      }
+
+      return touch
+    }
+
+    isOnFloor(col){
+      if(typeof col === 'object') return col.floorId.length !== 0
+      if(typeof col === 'string') return this.getCol(col).floorId !== ""
+    }
+
+    checkCurrentWorldCollisions(){
+
     }
   }
 

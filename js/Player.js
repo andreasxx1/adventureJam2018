@@ -11,21 +11,33 @@
 				super({id, x, y, w, h, states, screens, index})
 				///jump cooldown, lol like flies can have infinit jump for fly
 				this.jc = 0;
-				//returns a method to be called when the players position is wanted
-				const settings = {
+				this.jp = false;
+
+				this.vals = {
 					walkSpeed: 4,
 					runSpeed: 10,
-					jumpHeight: 50,
+					jumpHeight: 250,
 					dashDist: 100
 				}
-				this.move = phy.addToPhysicalWorld(this, settings);
+				this.move = phy.addToPhysicalWorld({
+					gameObj: this,
+					w:w, h:h, weight: 10
+				});
 		}
 		update() {
 			super.update();
 			//handle inputs
 			if(game.pressedKeys[KEY.LE]) this.moveLeft();
 			if(game.pressedKeys[KEY.RI]) this.moveRight();
-			if(game.pressedKeys[KEY.SP]) this.jump();
+			if(game.pressedKeys[KEY.SP]) {
+				if(!this.jp){
+					this.jp = true
+					this.jump();
+				}
+			}else{
+				this.jp = false;
+			}
+
 
 			//update positions
 			{
@@ -36,19 +48,21 @@
 		}
 		moveLeft() {
 			game.pressedKeys[KEY.SH]
-			? phy.walkLeft(this.id)
-			: phy.runLeft(this.id)
+			? phy.Left(this.id, this.vals.walkSpeed)
+			: phy.Left(this.id, this.vals.runSpeed)
 		}
 		moveRight(){
 			game.pressedKeys[KEY.SH]
-			? phy.walkRight(this.id)
-			: phy.runRight(this.id)
+			? phy.Right(this.id, this.vals.walkSpeed)
+			: phy.Right(this.id, this.vals.runSpeed)
 		}
 		jump(){
-			this.jc = jc !== null ? jc <= 0 ? null : jc-1 : null
-			if(jc === null){
-				phy.jump(this.id)
+			if(phy.isOnFloor(this.id)){
+				phy.Jump(this.id, this.vals.jumpHeight)
 			}
+		}
+		dash(){
+			///todo dash physics
 		}
 	}
 
