@@ -2,19 +2,21 @@
 	'use strict';
 
 	const options = {
-		PLAYER: { id: 'player', index: 0, w: 50, h: 105}
+		player: { id: 'player', constructor: 'Player', index: 0, w: 50, h: 105,  }
 	};
 
+	// ToDo: remove this function when GameHandler finished
 	function init() {
 		return new Promise(resolve => {
 			// Player.
 			const states = {};
-			const idle = DICTIONARY.PLAYER_IDLE;
+			const screens = [ SCREEN.LEVEL1 ];
 			//
-			states[idle] = { sprite: idle, frames: 2, tpf: 500 };
+			states[SPRITE.PLAYERIDLE] = { sprite: SPRITE.PLAYERIDLE, frames: 2, tpf: 500 };
 			//
-			game.player = new game.constructors.Player(_.assign(options.PLAYER, { states, screens: [ SCREEN.LEVEL1 ]}));
-
+			const parameters = _.assign(options.player, { states, screens });
+			//
+			game.instantiate(options.player.id, options.player.constructor, parameters);
 			//
 			resolve();
 		});
