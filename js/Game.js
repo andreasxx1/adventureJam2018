@@ -1,5 +1,5 @@
 (function() {
-	
+
 	class Game {
 		constructor(w, h, g) {
 			this.width = w;
@@ -82,7 +82,7 @@
 			//
 			this.initialize();
 		}
-		
+
 		initialize() {
 			Object.keys(SCREEN).map(key => { this.setScreen(SCREEN[key]); });
 			this.go(START_SCREEN);
@@ -121,8 +121,3 @@
 	window.Game = Game;
 
 })()
-
-
-
-
-

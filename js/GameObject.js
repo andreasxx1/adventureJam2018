@@ -18,14 +18,14 @@
 			this.isInstanciated = isInstanciated || true;
 			// Setting states
 			_.each(Object.keys(states), name => {
-				this.states[name] = { 
-					sprite: name, 
-					frames: states[name].frames, 
-					tpf: states[name].tpf, 
-					frame: 0, 
-					isRotated: false 
+				this.states[name] = {
+					sprite: name,
+					frames: states[name].frames,
+					tpf: states[name].tpf,
+					frame: 0,
+					isRotated: false
 				};
-				if (!this.activeState) { 
+				if (!this.activeState) {
 					this.activeState = this.states[name];
 				}
 			});
@@ -45,8 +45,8 @@
 
 		draw() {
 			if (this.isActive && this.activeState) {
-				if (this.isVisible) {	
-					//  
+				if (this.isVisible) {
+					//
 					const img = this.getActiveSprite();
 					const frx = (img.width / this.activeState.frames) * this.activeState.frame;
 					const fry = 0;
@@ -129,7 +129,3 @@
 	game.constructors.GameObject = GameObject;
 
 })();
-
-
-
-
