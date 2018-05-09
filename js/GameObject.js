@@ -16,7 +16,7 @@
 			this.activeState = null;
 			this.isBoundingboxVisible = false;
 			this.isInstanciated = isInstanciated || true;
-			this.constructorClass = constructor;
+			this.class = constructor;
 
 			// Setting states
 			_.each(Object.keys(states), name => {

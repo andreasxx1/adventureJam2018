@@ -54,13 +54,8 @@
 
 		load() {
 			return new Promise(resolve => {
-				const spriteNames = [];
-
-				Object.keys(SPRITE).map(key => { spriteNames.push(SPRITE[key]); });
-
+				const spriteNames = Object.keys(SPRITE).map(key => { return SPRITE[key]; });
 				_.each(spriteNames, (spriteName, index) => {
-
-					///lodash version 3 lines
 					if (!_.has(game.sprites, spriteName)){
 						game.sprites[spriteName] = new Image();
 						game.sprites[spriteName].src = ASSETS_FOLDER + spriteName + SPRITE_FORMAT;
