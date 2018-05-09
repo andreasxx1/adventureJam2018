@@ -30,7 +30,7 @@
 		}
 
 		instantiate(name, constructorName, ...args) {
-			this[name] = new this.constructors[constructorName](...args);
+			this[name] = new this.constructors[constructorName](_.assign(...args, { constructor: this.constructors[constructorName] } ));
 		}
 
 		execOnActiveObjects(fName) {

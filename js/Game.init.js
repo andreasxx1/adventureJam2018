@@ -2,7 +2,7 @@
 	'use strict';
 
 	const options = {
-		player: { id: 'player', constructor: 'Player', index: 0, w: 50, h: 105,  }
+		player: { id: 'player', constructor: 'Player', index: 0, w: 50, h: 105  }
 	};
 
 	// ToDo: remove this function when GameHandler finished
@@ -17,6 +17,8 @@
 			const parameters = _.assign(options.player, { states, screens });
 			//
 			game.instantiate(options.player.id, options.player.constructor, parameters);
+
+			console.log(game.player);
 			//
 			resolve();
 		});
