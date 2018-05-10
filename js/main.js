@@ -16,5 +16,5 @@
 		       		window.setTimeout(callback, 1000/60);
 		       };
 	}());
-	
+
 })(); // Self invoked function to start our code.
