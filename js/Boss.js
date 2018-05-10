@@ -17,7 +17,7 @@
             this.vals = {
                 walkSpeed: 2,
                 runSpeed: 10,
-                jumpHeight: 250,
+                jumpHeight: 350,
                 dashDist: 100,
                 //Distance from boss to player when on passive mode
                 defensiveDistance: game.width/3,
@@ -34,7 +34,11 @@
         update() {
             super.update();
 
-            this.bossState('DEFENSIVE');
+            
+            this.bossState('OFFENSIVE');
+            
+            
+            
             //update positions
             {
             let {x, y} = this.move(this.id)
@@ -74,13 +78,15 @@
         }
 
         towardsPlayer(){
-            if(Player.x < this.x){
-                if(!((this.x-Player.x) < this.offensiveDistance)){
-                    moveLeft();
+            let {x,y} = phy.distanceTo(this.id, this.playerInstance.id); 
+
+            if(x < 0){
+                if(!(abs(x) < this.offensiveDistance)){
+                    this.moveLeft();
                 }
             }else{
-                if(!((this.x-Player.x) < this.offensiveDistance)){
-                    moveRight();
+                if(!(abs(x) < this.offensiveDistance)){
+                    this.moveRight();
                 }
             }
         }
