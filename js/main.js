@@ -6,7 +6,7 @@
 	window.SCREEN = { MENU: 'menu', BACKGROUND: 'background', LEVEL1: 'level_1', INTERFACE: 'interface' };
 	window.ASSETS_FOLDER = 'assets/';
 	window.SPRITE_FORMAT = '.png';
-	window.SPRITE = { PLAYERIDLE: 'player_idle' };
+	window.SPRITE = { PLAYERIDLE: 'player_idle', BOSSTEST: 'boss-preview' };
 	window.requestAnimFrame = (function() { // Getting smooth animation interval function provided by the target browser.
 		return window.requestAnimationFrame ||
 		       window.webkitRequestAnimationFrame ||

@@ -3,7 +3,7 @@
 
 	const options = {
 		player: { id: 'player', constructor: 'Player', index: 0, w: 50, h: 105  },
-		boss:{id:'boss', constructor:'Boss'}
+		boss:{id:'boss', constructor:'Boss',index:0, h:105, w:70, x: 300}
 	};
 
 	// ToDo: remove this function when GameHandler finished
@@ -14,15 +14,22 @@
 			const screens = [ SCREEN.LEVEL1 ];
 			//
 			states[SPRITE.PLAYERIDLE] = { sprite: SPRITE.PLAYERIDLE, frames: 2, tpf: 500 };
+			
 			//
 			const parameters = _.assign(options.player, { states, screens });
 			//
 			game.instantiate(options.player.id, options.player.constructor, parameters);
-			game.instantiate(options.boss.id, options.boss.constructor, {
-				id: options.boss.id,
-				screens:[],
-				constructor:options.boss.constructor
-			})
+			
+			//
+			const statesBoss = {};
+			const screensBoss = [ SCREEN.LEVEL1 ];
+
+			statesBoss[SPRITE.BOSSTEST] = {sprite: SPRITE.BOSSTEST, frames: 1, tpf: 450};
+
+			const parametersBoss = _.assign(options.boss, { states: statesBoss, screens: screensBoss});
+
+			game.instantiate(options.boss.id, options.boss.constructor,parametersBoss);
+
 			//
 			console.log(game.boss);
 			game.sm.go(SCREEN.LEVEL1);

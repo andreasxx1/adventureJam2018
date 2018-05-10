@@ -171,8 +171,8 @@
       col.floorId = touch
     }
     distanceTo(id1,id2){
-      let col1 = getCol(id1);
-      let col2 = getCol(id2);
+      let col1 = this.getCol(id1);
+      let col2 = this.getCol(id2);
 
       let cen1 = new Vector(col1.pos.x + col1.dim.x/2, col1.pos.y + col1.dim.y/2);
       let cen2 = new Vector(col2.pos.x + col2.dim.x/2, col2.pos.y + col2.dim.y/2);
