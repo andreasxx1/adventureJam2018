@@ -37,6 +37,9 @@
 			}else{
 				this.jp = false;
 			}
+			if (game.pressedKeys[KEY.SH]){
+				console.log(JSON.stringify(phy.getCol('player')))
+			}
 
 
 			//update positions

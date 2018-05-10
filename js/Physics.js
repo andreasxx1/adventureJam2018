@@ -2,15 +2,26 @@
   'use strict';
 
   const GameObject = game.constructors.GameObject;
-  let abs = common.abs
+  const abs = common.abs
   const round = common.round
+  const flb = common.flb///not used
+  const pr = common.pr
 
   class Vector{
 		constructor(x,y){
 			this.x = x, this.y = y
 		}
+    set({x,y}){
+      this.x = x || 0
+      this.y = y || 0
+    }
+    null(){
+      this.x = 0;
+      this.y = 0;
+    }
     unit(){
-      this.div(this.mag());
+     this.div(this.mag());
+     return this
     }
     copy(){
       return new Vector(this.x, this.y)
@@ -27,6 +38,14 @@
 		}
     static dist(vec1, vec2){
       return vec2.copy().sub(vec1)
+    }
+    static flb(arr){
+      return _.map(arr, v=>{
+        return new Vector(round(v.x, 3),round(v.y, 3))
+      })
+    }
+    flb(){
+      this.set({x: round(this.x, 3), y: round(this.y, 3)})
     }
 		mag(){
 			return Math.sqrt(this.x * this.x + this.y * this.y)
@@ -155,89 +174,133 @@
     update(id){
       ///quickfix local static delta of 1000/60
       let delta = 1000/60;
+      const col = this.getCol(id)
 
-      ///fix any collisions and change velocity if nessessary
+      ///MAKE A STEP INTO THE FUTURE(DELTA) BY CHANGING
+      ///THE POSITION BASED ON THE VELOCITY
+      col.pos.add(col.vel.copy().div(delta))
 
-      let col = this.getCol(id)
-      col.vel.div(delta)
+      ///for the sake of fixing floating point numbers
+      //we round everything in the collider to the 3rd percision
+      //this.refineCollider(col)
+
+      ///check for any new collisions with immovable gameObjects
+      this.collideWithImmovableObjects(col)
+
       ///collisions with other gameObjects
       this.collideWithObjects(col)
-      ///collide with non movable objects
-      this.collideWithImmovableObjects(col)
-      ///update position
-      col.pos.add(col.vel)
-      col.vel.mul(delta)
 
+      ///AT THIS POINT col.acc HAS ANY FORCES ADDED SINCE
+      ///THE LAST UPDATE CALL
 
-      ///add all global forces
+      ///NOW WE ADD ANY WORLD RELATED FORCES
 
       ///gravity
       col.acc.add({y: this.world.grav})
-      ///update speeds and reset all accelerations
-      col.vel.add(col.acc)
-      col.acc = new Vector(0,0);
-      /// add drag and friction
-      col.vel.x *= this.world.airDrag
+
+      ///airDrag
+      col.acc.mul(this.world.airDrag)
+      /*place for adding wind*/
+
+      ///groundDrag
       if(this.isOnFloor(col)){
-        col.vel.x *= this.world.groundDrag
+        col.acc.mul(this.world.groundDrag)
       }
+
+      ///NOW THAT ALL THE FORCES HAVE BEEN ADDED
+      ///WE UPDATE THE VELOCITY WHICH WILL BE USED
+      ///IN THE NEXT UPDATE CALL
+      col.vel.add(col.acc)
+
+      ///WE CAN RESET THE ACCELERATION BECAUSE THAT
+      ///IS A PROPERTY OF ACCELERATION BY DEFINITION
+      col.acc.null();
+
+      ///WE ARE DONE AND CAN RETURN THE OBJECTS POSITION
+      ///TO USE IN THE DRAW FUNCTION
       return col.pos.copy()
     }
 
-    static collision(mode, col1, col2){
-      let p1 = col1.pos.copy(),
-          p2 = col2.pos.copy(),
-          v1 = col1.vel.copy(),
-          v2 = col2.vel.copy(),
-          c1 = {x: p1.x+v1.x, y: p1.y+v1.y,
-                w: col1.dim.x, h: col1.dim.y},
-          c2 = {x: p2.x+v2.x, y: p2.y+v2.y,
-                w: col2.dim.x, h: col2.dim.y},
-          x1 = ((c1.x + c1.w) < c2.x),
-          x2 = (c1.x > (c2.x + c2.w)),
-          y1 = ((c1.y + c1.h) < c2.y),
-          y2 = (c1.y > (c2.y + c2.h)),
+    static collision(mode, collider1, collider2){
+      let p1 = collider1.pos.copy(),
+          p2 = collider2.pos.copy(),
+          v1 = collider1.vel.copy(),
+          v2 = collider2.vel.copy(),
+          d1 = collider1.dim.copy(),
+          d2 = collider2.dim.copy(),
+
+          le1 = p1.x,
+          ri1 = p1.x + d1.x,
+          up1 = p1.y,
+          dw1 = p1.y + d1.y,
+          ce1x = p1.x + d1.x / 2,
+          ce1y = p1.y + d1.y / 2,
+
+          le2 = p2.x,
+          ri2 = p2.x + d2.x,
+          up2 = p2.y,
+          dw2 = p2.y + d2.y,
+          ce2x = p2.x + d2.x / 2,
+          ce2y = p2.y + d2.y / 2,
+
+          x1 = (ri2 <= le1),
+          x2 = (ri1 <= le2),
+          y1 = (dw1 <= up2),
+          y2 = (dw2 <= up1),
           coll = !(x1 || x2) && !(y1 || y2),
-          touch = ''
+          touch = coll ? collider2.id : ''
 
       if(coll && mode == 'imm'){
-        let cen1 = new Vector( c1.x+c1.w/2, c1.y+c1.h/2)
-        let cen2 = new Vector( c2.x+c2.w/2, c2.y+c2.h/2)
-        let to1 = Vector.dist(cen2, cen1)
 
+        let back = v1.copy().mul(-1),
+            backdir = back.unit(),
 
-        if(abs(to1.x) > abs(to1.y)){
-          if(to1.x > 0){///colliding with right wall
-            if(p1.x > (p2.x + c2.w)) v1.x = p1.x - (p2.x + c2.w)
-            if(round(p1.x,3) === round((p2.x + c2.w),3)) v1.x = 0
-            if(p1.x < (p2.x + c2.w)){
-              v1.x = ((p2.x+c2.w) - p1.x)
-              console.log('if you see this message then you have found the glitch')
-            }
-          }else{///colliding with left wall
-            if((p1.x + c1.w) < p2.x) v1.x = p2.x - (p1.x + c1.w)
-            if(round(p1.x + c1.w,3) === round(p2.x,3)) v1.x = 0
-            if((p1.x + c1.w) > p2.x) v1.x = ((p1.x+c1.w) - p2.x)
-          }
+            xe2 = backdir.x >=0 ? ri2 : le2,
+            ye2 = backdir.y >=0 ? dw2 : up2,
+            xe1 = backdir.x >=0 ? le1 : ri1,
+            ye1 = backdir.y >=0 ? up1 : dw1,
+            xdist = xe1 < xe2 ? xe2-xe1 : xe1-xe2,
+            ydist = ye1 < xe2 ? ye2-ye1 : ye1-ye2,
+            xmul = xdist / backdir.x,
+            ymul = ydist / backdir.y,
+
+            newPos = p1.copy(),
+            newVel = v1.copy(),
+            rest
+
+        if(backdir.x !== 0 && abs(xmul) < abs(ymul)){
+          backdir.mul(abs(xmul))
+          let magNew = backdir.mag()
+          rest = v1.unit().mul(magNew)
+          rest.x = 0
+          newVel.x = 0
+        }else if(backdir.y !== 0 && abs(ymul) <= abs(xmul)){
+          backdir.mul(abs(ymul))
+          let magNew = backdir.mag()
+          rest = v1.unit().mul(magNew)
+          rest.y = 0
+          newVel.y = 0
         }else{
-          if(to1.y > 0){
-            ///no cieling collision yet
-          }else{
-            if((p1.y + c1.h) < p2.y) v1.y = p2.y - (p1.y + c1.h)
-            if(round((p1.y + c1.h),3) === round(p2.y,3)) v1.y = 0
-            if((p1.y + c1.h) > p2.y) v1.y = (p1.y + c1.h) - p2.y
-            touch = col2.id
-          }
+          throw 'unhandled collision uccured'
         }
-        col1.vel = v1
-      }
 
+        newPos = p1.add(backdir)
+        newPos.add(rest)
+
+        collider1.pos = newPos
+        collider1.vel = newVel
+      }
       return touch
     }
 
     isOnFloor(col){
       if(typeof col === 'object') return col.floorId.length !== 0
       if(typeof col === 'string') return this.getCol(col).floorId !== ""
+    }
+    refineCollider(col){
+        col.pos.flb()
+        col.vel.flb()
+        col.acc.flb()
     }
 
     checkCurrentWorldCollisions(){
