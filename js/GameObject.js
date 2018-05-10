@@ -2,7 +2,7 @@
 	'use strict';
 
 	class GameObject {
-		constructor({ id, x, y, w, h, states, screens, index, isInstanciated }) {
+		constructor({ id, x, y, w, h, states, screens, index, constructor, isInstanciated  }) {
 			this.id = id || 'gameObject';
 			this.x = x || 0;
 			this.y = y || 0;
@@ -16,6 +16,8 @@
 			this.activeState = null;
 			this.isBoundingboxVisible = false;
 			this.isInstanciated = isInstanciated || true;
+			this.class = constructor;
+
 			// Setting states
 			_.each(Object.keys(states), name => {
 				this.states[name] = {
@@ -97,7 +99,7 @@
 			return this.activeState ? game.sprites[this.activeState.sprite] : null;
 		}
 
-		setstates(state) {
+		setStates(state) {
 			if (this.states[state]) {
 				this.activeState = this.states[state];
 			} else {

@@ -7,8 +7,8 @@
 
 	// Player object
 	class Player extends GameObject {
-		constructor({id, x, y, w, h, states, screens, index}){
-				super({id, x, y, w, h, states, screens, index})
+		constructor({id, x, y, w, h, states, screens, constructor, index}){
+				super({id, x, y, w, h, states, screens, constructor, index})
 				///jump cooldown, lol like flies can have infinit jump for fly
 				this.jc = 0;
 				this.jp = false;

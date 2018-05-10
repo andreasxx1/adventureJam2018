@@ -19,14 +19,18 @@
 		}
 
 		update() {
-			this.execOnActiveObjects(DICTIONARY.UPDATE);
+			this.execOnActiveObjects('update');
 			setTimeout(() => { this.update(); }, 1000/60); // 1000/60 = 60 frames per seconds.
 		}
 
 		draw() {
 			this.clearCanvas();
-			this.execOnActiveObjects(DICTIONARY.DRAW);
+			this.execOnActiveObjects('draw');
 			requestAnimFrame(() => { this.draw(); }); // requestAnimFrame uses delta time and adapts the frame rate for a smooth drawing.
+		}
+
+		instantiate(name, constructorName, ...args) {
+			this[name] = new this.constructors[constructorName](_.assign(...args, { constructor: this.constructors[constructorName] } ));
 		}
 
 		execOnActiveObjects(fName) {
@@ -45,23 +49,18 @@
 		}
 
 		reArrangeWorld() {
-			this.world.sort(function(a, b) {
-				if (a.index > b.index) { return 1; }
-				if (a.index < b.index) { return -1; }
-				return 0;
-			});
+			_.sortBy(this.world, a => {'index'});
 		}
 
 		load() {
 			return new Promise(resolve => {
-				_.each(SPRITES, (spriteName, index) => {
-					if (!game.sprites.some((v, key) => {
-						return key === spriteName;
-					})) {
+				const spriteNames = Object.keys(SPRITE).map(key => { return SPRITE[key]; });
+				_.each(spriteNames, (spriteName, index) => {
+					if (!_.has(game.sprites, spriteName)){
 						game.sprites[spriteName] = new Image();
 						game.sprites[spriteName].src = ASSETS_FOLDER + spriteName + SPRITE_FORMAT;
 					}
-					if (index+1 >= SPRITES.length) {
+					if (index+1 >= spriteNames.length) {
 						resolve();
 					}
 				});
@@ -85,7 +84,6 @@
 
 		initialize() {
 			Object.keys(SCREEN).map(key => { this.setScreen(SCREEN[key]); });
-			this.go(START_SCREEN);
 		}
 
 		go(screen) {
