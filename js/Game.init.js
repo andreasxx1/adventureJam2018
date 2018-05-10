@@ -2,7 +2,8 @@
 	'use strict';
 
 	const options = {
-		player: { id: 'player', constructor: 'Player', index: 0, w: 50, h: 105  }
+		player: { id: 'player', constructor: 'Player', index: 0, w: 50, h: 105  },
+		boss:{id:'boss', constructor:'Boss'}
 	};
 
 	// ToDo: remove this function when GameHandler finished
@@ -17,8 +18,13 @@
 			const parameters = _.assign(options.player, { states, screens });
 			//
 			game.instantiate(options.player.id, options.player.constructor, parameters);
-			
+			game.instantiate(options.boss.id, options.boss.constructor, {
+				id: options.boss.id,
+				screens:[],
+				constructor:options.boss.constructor
+			})
 			//
+			console.log(game.boss);
 			game.sm.go(SCREEN.LEVEL1);
 			//
 			resolve();
