@@ -14,7 +14,7 @@
 			this.isVisible = true; 	 // Affects object visibility.
 			this.isActive = true; 	 // Affects object interaction with the world.
 			this.activeState = null;
-			this.isBoundingboxVisible = false;
+			this.isBoundingboxVisible = true;
 			this.isInstanciated = isInstanciated || true;
 			this.class = constructor;
 
@@ -47,21 +47,20 @@
 
 		draw() {
 			if (this.isActive && this.activeState) {
+				//
+				const img = this.getActiveSprite();
+				const frx = (img.width / this.activeState.frames) * this.activeState.frame;
+				const fry = 0;
+				const spw = img.width / this.activeState.frames;
+				const sph = img.height;
+				const pox = this.x;
+				const poy = this.y;
+				const drw = img.width / this.activeState.frames;
+				const drh = img.height;
+				//
 				if (this.isVisible) {
-					//
-					const img = this.getActiveSprite();
-					const frx = (img.width / this.activeState.frames) * this.activeState.frame;
-					const fry = 0;
-					const spw = img.width / this.activeState.frames;
-					const sph = img.height;
-					const pox = this.x;
-					const poy = this.y;
-					const drw = img.width / this.activeState.frames;
-					const drh = img.height;
-
 					// Getting object dimentions based on the active state sprite.
 					this.getObjectDimentions();
-
 					// Rendering
 					if (this.activeState.isRotated) {
 						game.context.save();
@@ -72,10 +71,12 @@
 					} else {
 						game.context.drawImage(img,frx,fry,spw,sph,pox,poy,drw,drh);
 					}
+
 				}
 				//
 				if (this.isBoundingboxVisible) {
-					// ToDo: draw object's bounding box here.
+					game.context.fillStyle = "rgba(255, 0, 255, 0.5)";
+					game.context.fillRect(pox,poy,drw,drh);
 				}
 			}
 		}
