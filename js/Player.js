@@ -21,7 +21,7 @@
 				}
 				this.move = phy.addToPhysicalWorld({
 					gameObj: this,
-					w:w, h:h, weight: 10
+					w:w, h:h, weight: 50
 				});
 		}
 		update() {
