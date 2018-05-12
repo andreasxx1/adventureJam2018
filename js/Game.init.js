@@ -9,7 +9,7 @@
 	// ToDo: remove this function when GameHandler finished
 	function init() {
 		return new Promise(resolve => {
-			// createPlayer();
+			createPlayer();
 			createEnemy6();
 			//
 			game.addCallback('draw', drawColliders);
@@ -32,16 +32,16 @@
 		game.instantiate(options.enemy6.id, options.enemy6.constructor, parameters);
 	}
 
-	// function createPlayer() {
-	// 	const states = {};
-	// 	const screens = [ SCREEN.LEVEL1 ];
-	// 	//
-	// 	states[SPRITE.PLAYERIDLE] = { sprite: SPRITE.PLAYERIDLE, frames: 2, tpf: 500 };
-	// 	//
-	// 	const parameters = _.assign(options.player, { states, screens });
-	// 	//
-	// 	game.instantiate(options.player.id, options.player.constructor, parameters);
-	// }
+	function createPlayer() {
+		const states = {};
+		const screens = [ SCREEN.LEVEL1 ];
+		//
+		states[SPRITE.PLAYERIDLE] = { sprite: SPRITE.PLAYERIDLE, frames: 2, tpf: 500 };
+		//
+		const parameters = _.assign(options.player, { states, screens });
+		//
+		game.instantiate(options.player.id, options.player.constructor, parameters);
+	}
 
 	// Game instance.
 	window.game = new Game(800, 600, 0.5);

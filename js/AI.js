@@ -19,6 +19,7 @@
 		constructor({id, x, y, w, h, states, screens, constructor, index}){
 				super({id, x, y, w, h, states, screens, constructor, index});
 				this.AI = new game.constructors.AI;
+				this.isColliding = { x: false, y: false };
 
 				this.jc = 0;
 				this.jp = false;
@@ -32,8 +33,20 @@
 				//
 				this.move = physicEngine.addToPhysicalWorld({
 					gameObj: this,
-					w:w, h:h, weight: 10
+					w:w, h:h, weight: 2
 				});
+		}
+
+		isCollidingPlayer() {
+			_.each(physicEngine.getPhysicalWorld(), obj => {
+				// console.log(obj);
+				console.log();
+				if (obj.id === 'player') {
+					this.isColliding.x = this.x + this.width >= obj.pos.x && this.x <= obj.pos.x + obj.dim.x;
+					this.isColliding.y = this.y + this.height >= obj.pos.y && this.y <= obj.pos.y + obj.dim.y;
+					// console.log(this.isColliding);
+				}
+			});
 		}
 
 		update() {
@@ -50,6 +63,8 @@
 			}else{
 				this.jp = false;
 			}
+
+			this.isCollidingPlayer();
 
 			//update positions
 			{
