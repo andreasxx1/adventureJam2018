@@ -5,10 +5,20 @@
 	const physicEngine = game.phy;
 	const GameObject = game.constructors.GameObject;
 
-	// 
-	class ArtificialInteligence extends GameObject {
+	class AI {
+		constructor() {
+
+		}
+
+	}
+
+	game.constructors.AI = AI;
+
+	// test enemy
+	class Enemy6 extends GameObject {
 		constructor({id, x, y, w, h, states, screens, constructor, index}){
 				super({id, x, y, w, h, states, screens, constructor, index});
+				this.AI = new game.constructors.AI;
 
 				this.jc = 0;
 				this.jp = false;
@@ -24,8 +34,6 @@
 					gameObj: this,
 					w:w, h:h, weight: 10
 				});
-
-				console.info('AI instanciated');
 		}
 
 		update() {
@@ -70,6 +78,6 @@
 		}
 	}
 
-	game.constructors.ArtificialInteligence = ArtificialInteligence;
+	game.constructors.Enemy6 = Enemy6;
 
 })();

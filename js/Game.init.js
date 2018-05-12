@@ -3,14 +3,14 @@
 	//
 	const options = {
 		player: { id: 'player', constructor: 'Player', index: 0, w: 50, h: 105  },
-		AI: { id: 'AI', constructor: 'ArtificialInteligence', index: 1, w: 655/5, h: 103 }
+		enemy6: { id: 'enemy6', constructor: 'Enemy6', index: 1, w: 655/5, h: 103 }
 	};
 
 	// ToDo: remove this function when GameHandler finished
 	function init() {
 		return new Promise(resolve => {
 			// createPlayer();
-			createArtifialInteligence();
+			createEnemy6();
 			//
 			game.addCallback('draw', drawColliders);
 			//
@@ -21,17 +21,15 @@
 		});
 	}
 
-	function createArtifialInteligence() {
+	function createEnemy6() {
 		const states = {};
 		const screens = [ SCREEN.LEVEL1, SCREEN.LEVEL2 ];
 		//
 		states[SPRITE.MOB6ATT] = { sprite: SPRITE.MOB6ATT, frames: 5, tpf: 250 };
 		//
-		const parameters = _.assign(options.AI, { states, screens });
+		const parameters = _.assign(options.enemy6, { states, screens });
 		//
-		game.instantiate(options.AI.id, options.AI.constructor, parameters);
-		//
-		// game[options.AI.id].isBoundingboxVisible = true;
+		game.instantiate(options.enemy6.id, options.enemy6.constructor, parameters);
 	}
 
 	// function createPlayer() {
@@ -74,7 +72,6 @@
 			setTestScreenButtons();
 		})
 		.then(() => {
-			console.log('game start');
 			game.start(); // Global function from GameInit.js (all the objects that need to be init at the begining here)
 		});
 	});
