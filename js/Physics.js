@@ -57,6 +57,13 @@
       if(scalar !== NaN) this.x *= scalar, this.y *= scalar;
       return this
 		}
+    mulVec(vec){
+      if(vec.constructor.name === 'Vector'){
+        this.x *= vec.x;
+        this.y *= vec.y;
+      }
+      return this
+    }
     div(scalar){
       if(scalar !== NaN) this.x /= scalar,  this.y /= scalar;
       return this
@@ -85,10 +92,8 @@
         floors: ['main-floor', 'platform'],
         walls: ['left-wall', 'right-floor'],
         obstacles: [],
-        drag: {
-          air: new Vector(0.13, 0.03),
-          groud: new Vector(0.02, 0)
-        },
+        drag: new Vector(0.10, 0.03),
+        groundFriction: 0.04,
         grav: 10
       }
       this.physicalWorld = [
@@ -193,9 +198,7 @@
 
       ///MAKE A STEP INTO THE FUTURE(DELTA) BY CHANGING
       ///THE POSITION BASED ON THE VELOCITY
-
-      col.pos.add(col.vel.copy().div(delta * (1/col.weight)))
-      console.log(col.id, col.vel);
+      col.pos.add(col.vel.copy().div(delta * col.weight))
       //pr(col.pos)
       ///for the sake of fixing floating point numbersw
       //we round everything in the collider to the 3rd percision
@@ -215,22 +218,9 @@
       ///gravity
       col.acc.add({y: this.world.grav})
 
-      //col.acc.add(this.Drag(col))
+      col.acc.add(this.getDrag(col))
 
-      ///airDrag
-      let f = col.vel.copy().mul(this.world.airDrag * -1)
-      col.acc.add(f)
-
-      /*place for adding wind*/
-
-      ///groundDrag
-      if(this.isOnFloor(col)){
-        let f = col.vel.x * this.world.groundDrag * -1
-        col.acc.x += f;
-      }
-
-
-      ///NOW THAT ALL THE FORCES HAVE BEEN ADDED
+      //NOW THAT ALL THE FORCES HAVE BEEN ADDED
       ///WE UPDATE THE VELOCITY WHICH WILL BE USED
       ///IN THE NEXT UPDATE CALL
       col.vel.add(col.acc)
@@ -272,7 +262,7 @@
           y2 = (dw2 <= up1),
           coll = !(x1 || x2) && !(y1 || y2)
 
-        console.log(collider1, collider2)
+
 
       if(coll && mode == 'imm'){
         let back = v1.copy().mul(-1),
@@ -315,10 +305,16 @@
         collider1.vel = newVel
       }
     }
-    Drag(col){
-      let d = this.world.drag.air.copy()
-      d.add(this.world.drag.ground)
-
+    getDrag(col){
+      let f,d = col.vel.copy().mul(-1)
+      ///
+      f = this.world.drag.copy()
+      ///
+      if(this.isOnFloor(col)){
+        f.x += this.world.groundFriction
+      }
+      ///
+      return d.mulVec(f)
     }
 
     isOnFloor(col){
