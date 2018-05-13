@@ -55,7 +55,7 @@
 			if(phy.isOnFloor(this.id) && game.pressedKeys[KEY.SH]){
 				phy.Left(this.id, this.vals.runSpeed)
 			}else{
-				if (this.activeState !== SPRITE.PLAYERRUN) this.setStates(SPRITE.PLAYERRUN) // Only run available
+				if (phy.isOnFloor(this.id) && this.activeState.sprite !== SPRITE.PLAYERRUN) this.setStates(SPRITE.PLAYERRUN) // Only run available
 				phy.Left(this.id, this.vals.walkSpeed)
 			}
 			this.isRotated = true;
@@ -64,7 +64,7 @@
 			if(phy.isOnFloor(this.id) && game.pressedKeys[KEY.SH]){
 				phy.Right(this.id, this.vals.runSpeed)
 			}else{
-				if (this.activeState !== SPRITE.PLAYERRUN) this.setStates(SPRITE.PLAYERRUN) // Only run available
+				if (phy.isOnFloor(this.id) && this.activeState.sprite !== SPRITE.PLAYERRUN) this.setStates(SPRITE.PLAYERRUN) // Only run available
 				phy.Right(this.id, this.vals.walkSpeed)
 			}
 			this.isRotated = false;
