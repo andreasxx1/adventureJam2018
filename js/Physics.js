@@ -159,7 +159,6 @@
     }
     Left(id, speed){
       let col = this.getCol(id)
-      console.log(col.acc.x);
       if(col.acc.x === 0 || !this.blockLeft){
         col.acc.add({x: -speed})
       }
