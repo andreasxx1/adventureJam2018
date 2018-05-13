@@ -123,7 +123,7 @@
 		}
     }
 
-	function setScreenButtons() {
+	function setScreenButtonsDisplay() {
 		const area = document.getElementById("button-area");
 		area.innerHTML = "Choose screen: ".bold();
 		//
@@ -182,7 +182,7 @@
 		});
 	}
 
-	function setDrawColliders() {
+	function setDrawCollidersCallback() {
 		game.pushCallback('draw', drawColliders);
 	}
 
@@ -195,8 +195,8 @@
 		if (ACTUAL_MODE === MODE.DEV) {
 			setOptionsDisplay();
 			setGameVersionDisplay(GAME_VERSION);
-			setScreenButtons();
-			setDrawColliders();
+			setScreenButtonsDisplay();
+			setDrawCollidersCallback();
 		}
 	}
 
