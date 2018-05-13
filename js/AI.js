@@ -39,12 +39,9 @@
 
 		isCollidingPlayer() {
 			_.each(physicEngine.getPhysicalWorld(), obj => {
-				// console.log(obj);
-				console.log();
 				if (obj.id === 'player') {
 					this.isColliding.x = this.x + this.width >= obj.pos.x && this.x <= obj.pos.x + obj.dim.x;
 					this.isColliding.y = this.y + this.height >= obj.pos.y && this.y <= obj.pos.y + obj.dim.y;
-					// console.log(this.isColliding);
 				}
 			});
 		}

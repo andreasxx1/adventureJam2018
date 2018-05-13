@@ -11,7 +11,7 @@
 			this.sprites = [];
 			this.constructors = {};
 			this.sm = new ScreenManager(); // Class below
-			this.callbacks = { draw: [], update: [] };
+			this.callbacks = {};
 		}
 
 		start() {
@@ -20,15 +20,16 @@
 		}
 
 		update() {
-			this.execOnActiveObjects('update');
-			_.each(this.callbacks.update, callback => { callback(); });
+			this.updateObjectStatus(); // set isActive flag.
+			this.execCallbacks('update'); // Injected functions (to inject function use pushCallback);
+			this.execFunctionOnActiveObjects('update');
 			setTimeout(() => { this.update(); }, 1000/60); // 1000/60 = 60 frames per seconds.
 		}
 
 		draw() {
 			this.clearCanvas();
-			this.execOnActiveObjects('draw');
-			_.each(this.callbacks.draw, callback => { callback(); });
+			this.execCallbacks('draw');
+			this.execFunctionOnActiveObjects('draw');
 			requestAnimFrame(() => { this.draw(); }); // requestAnimFrame uses delta time and adapts the frame rate for a smooth drawing.
 		}
 
@@ -36,14 +37,24 @@
 			this[name] = new this.constructors[constructorName](_.assign(...args, { constructor: this.constructors[constructorName] } ));
 		}
 
-		execOnActiveObjects(fName) {
+		updateObjectStatus() {
 			_.each(this.world, object => {
-				if (object.getScreens().some(screen => {
-					return screen === this.sm.getActiveScreen();
-				})) {
-					object[fName]();
-				}
+				object.isActive = object.getScreens().some(screen => { return screen === this.sm.getActiveScreen() });
 			});
+		}
+
+		execFunctionOnActiveObjects(fName) {
+			_.each(this.world, object => {
+				if (object.isActive) object[fName]();
+			});
+		}
+
+		execCallbacks(cName) {
+			if (this.callbacks[cName]) this.callbacks[cName]();
+		}
+
+		pushCallback(cName, callback) {
+			this.callbacks[cName] = callback;
 		}
 
 		createObject(object) {
@@ -72,10 +83,6 @@
 
 		clearCanvas() {
 			this.context.clearRect(0, 0, this.width, this.height);
-		}
-
-		addCallback(type, callback) {
-			if (this.callbacks[type]) { this.callbacks[type].push(callback); }
 		}
 
 	};
@@ -116,17 +123,10 @@
 		setActiveScreen(screen) {
 			this.lastActiveScreen = this.activeScreen;
 			this.activeScreen = screen;
-			this.displayActualScreenInHtml(); // Temporal testing
 		}
 
 		backToLastActiveScreen() {
 			this.activeScreen = this.lastActiveScreen;
-		}
-
-		// Temporal testing		
-
-		displayActualScreenInHtml() {
-			document.getElementById("actualScreen").innerHTML = this.getActiveScreen();
 		}
 	}
 
