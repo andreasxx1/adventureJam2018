@@ -38,6 +38,11 @@
 				this.jp = false;
 			}
 			//console.log(game.pressedKeys[KEY.SH])
+			if (phy.isOnFloor(this.id)) {
+				if(!game.pressedKeys[KEY.RI] && !game.pressedKeys[KEY.LE]) this.setStates(SPRITE.PLAYERIDLE);
+			} else {
+				this.setStates(SPRITE.PLAYERJUMP);
+			}
 
 			//update positions
 			{
@@ -47,18 +52,26 @@
 			}
 		}
 		moveLeft() {
+			if (phy.isOnFloor(this.id) && this.activeState !== SPRITE.PLAYERRUN) {
+				this.setStates(SPRITE.PLAYERRUN);
+			}
 			if(phy.isOnFloor(this.id) && game.pressedKeys[KEY.SH]){
 				phy.Left(this.id, this.vals.runSpeed)
 			}else{
 				phy.Left(this.id, this.vals.walkSpeed)
 			}
+			this.isRotated = true;
 		}
 		moveRight(){
+			if (phy.isOnFloor(this.id)  && this.activeState !== SPRITE.PLAYERRUN) {
+				this.setStates(SPRITE.PLAYERRUN);
+			}
 			if(phy.isOnFloor(this.id) && game.pressedKeys[KEY.SH]){
 				phy.Right(this.id, this.vals.runSpeed)
 			}else{
 				phy.Right(this.id, this.vals.walkSpeed)
 			}
+			this.isRotated = false;
 		}
 		jump(){
 			if(phy.isOnFloor(this.id)){

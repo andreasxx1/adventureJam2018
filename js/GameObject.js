@@ -16,6 +16,7 @@
 			this.activeState = null;
 			this.isInstanciated = isInstanciated || true;
 			this.classConstructor = constructor; // in case needed 
+			this.isRotated = false;
 
 			// Setting states
 			_.each(Object.keys(states), name => {
@@ -23,8 +24,7 @@
 					sprite: name,
 					frames: states[name].frames,
 					tpf: states[name].tpf,
-					frame: 0,
-					isRotated: false
+					frame: 0
 				};
 				if (!this.activeState) {
 					this.activeState = this.states[name];
@@ -61,7 +61,7 @@
 					// Getting object dimentions based on the active state sprite.
 					this.getObjectDimentions();
 					// Rendering
-					if (this.activeState.isRotated) {
+					if (this.isRotated) {
 						game.context.save();
 						game.context.translate(game.width, 0);
 						game.context.scale(-1, 1);
@@ -96,7 +96,11 @@
 
 		setStates(state) {
 			if (this.states[state]) {
-				this.activeState = this.states[state];
+				if (this.activeState.sprite !== state) {
+					this.activeState = this.states[state];
+					this.animate();
+					console.log("this.activeState:", this.activeState);
+				}
 			} else {
 				throw 'Error: trying to set state: ' + state + ', but is: ' + this.states[state];
 			}
@@ -110,7 +114,7 @@
 		animate() {
 			const state = this.activeState;
 			state.frame = 0;
-			if (this.animationLoop) { clear(this.animationLoop); }
+			if (this.animationLoop) { clearInterval(this.animationLoop); }
 			this.animationLoop = setInterval(() => {
 				if (state.frame < state.frames-1) {
 					state.frame++;

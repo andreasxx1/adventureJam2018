@@ -50,16 +50,16 @@
 			super.update();
 
 			//handle inputs
-			if(game.pressedKeys[KEY.LE]) { this.moveLeft(); }
-			if(game.pressedKeys[KEY.RI]) { this.moveRight(); }
-			if(game.pressedKeys[KEY.SP]) {
-				if (!this.jp) {
-					this.jp = true
-					this.jump();
-				}
-			}else{
-				this.jp = false;
-			}
+			// if(game.pressedKeys[KEY.LE]) { this.moveLeft(); }
+			// if(game.pressedKeys[KEY.RI]) { this.moveRight(); }
+			// if(game.pressedKeys[KEY.SP]) {
+			// 	if (!this.jp) {
+			// 		this.jp = true
+			// 		this.jump();
+			// 	}
+			// }else{
+			// 	this.jp = false;
+			// }
 			this.isCollidingPlayer();
 
 			//update positions
