@@ -6,7 +6,7 @@
 	//
 	window.ASSETS_FOLDER = 'assets/';
 	window.SPRITE_FORMAT = '.png';
-	window.SPRITE = { PLAYERIDLE: 'player_idle', MOB6ATT: 'mob6attack' };
+	window.SPRITE = { PLAYERIDLE: 'player_idle', MOB6ATT: 'mob6attack'};
 	//
 	window.MODE = { DEV: 'dev', GAME: 'game' };
 	window.ACTUAL_MODE = MODE.DEV;

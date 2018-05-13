@@ -15,7 +15,7 @@
 
             
             this.vals = {
-                walkSpeed: 2,
+                walkSpeed: 10,
                 runSpeed: 10,
                 jumpHeight: 350,
                 dashDist: 100,
@@ -26,7 +26,7 @@
             }
             this.move = phy.addToPhysicalWorld({
                 gameObj: this,
-                w:w, h:h, weight: 35, x:x, y:y
+                w:w, h:h, weight: 2, x:x, y:y
             });
             this.playerInstance =  game.player;
             console.log(game.player);

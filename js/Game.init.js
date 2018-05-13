@@ -20,8 +20,8 @@
 	window.ASSETS_FOLDER = 'assets/';
 	window.SPRITE_FORMAT = '.png';
 	//
-	window.SPRITE = { PLAYERIDLE: 'player_idle', MOB6ATT: 'mob6attack' };
-	window.SCREEN = { MENU: 'menu', GAMEOVER: 'gameover', LEVEL1: 'level_1', LEVEL2: 'level_2', LEVEL3: 'level_3' };
+	window.SPRITE = { PLAYERIDLE: 'player_idle', MOB6ATT: 'mob6attack', BOSSTEST: 'boss-preview'  };
+	window.SCREEN = { MENU: 'menu', GAMEOVER: 'gameover', LEVEL1: 'level_1', LEVEL2: 'level_2', LEVEL3: 'level_3', LEVEL4: 'level_4' };
 	window.MODE = { DEV: 'dev', GAME: 'game' };
 	//
 	window.ACTUAL_MODE = MODE.DEV;
@@ -32,7 +32,8 @@
 	window.options = {
 		dev: { displayVersion: true, drawColliders: true, displayScreenButtons: true },
 		player: { id: 'player', constructor: 'Player', index: 0, w: 50, h: 105  },
-		enemy6: { id: 'enemy6', constructor: 'Enemy6', index: 1, w: 655/5, h: 103 }
+		enemy6: { id: 'enemy6', constructor: 'Enemy6', index: 1, w: 655/5, h: 103 },
+		boss: {id: 'boss', constructor: 'Boss', index: 2, w:70, h:106}
 	};
 
 	// ToDo: remove this function when GameHandler finished
@@ -48,6 +49,7 @@
 	function createTestLevel(index) {
 		createPlayer();
 		createEnemy6();
+		createBoss();
 		//
 		// game.sm.go(SCREEN.LEVEL1);
 		game.sm.go(SCREEN.LEVEL2);
@@ -68,13 +70,24 @@
 
 	function createPlayer() {
 		const states = {};
-		const screens = [ SCREEN.LEVEL1, SCREEN.LEVEL3 ];
+		const screens = [ SCREEN.LEVEL1, SCREEN.LEVEL3, SCREEN.LEVEL4 ];
 		//
 		states[SPRITE.PLAYERIDLE] = { sprite: SPRITE.PLAYERIDLE, frames: 2, tpf: 500 };
 		//
 		const parameters = _.assign(options.player, { states, screens });
 		//
 		game.instantiate(options.player.id, options.player.constructor, parameters);
+	}
+
+	function createBoss() {
+		const states = {};
+		const screens = [ SCREEN.LEVEL4 ];
+		//
+		states[SPRITE.BOSSTEST] = { sprite: SPRITE.BOSSTEST, frames: 1, tpf: 500 };
+		//
+		const parameters = _.assign(options.boss, { states, screens });
+		//
+		game.instantiate(options.boss.id, options.boss.constructor, parameters);
 	}
 
 	//////////
