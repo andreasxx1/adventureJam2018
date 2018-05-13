@@ -15,7 +15,7 @@
 			game.addCallback('draw', drawColliders);
 			//
 			// game.sm.go(SCREEN.LEVEL1);
-			game.sm.go(SCREEN.LEVEL1);
+			game.sm.go(SCREEN.LEVEL2);
 			//
 			resolve();
 		});
