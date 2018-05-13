@@ -125,7 +125,7 @@
 
 	function setScreenButtons() {
 		const area = document.getElementById("button-area");
-		area.innerHTML = "Choose screens: ".bold();
+		area.innerHTML = "Choose screen: ".bold();
 		//
 		_.each(Object.values(SCREEN), screen => {
 			// Creating button in HTML.
@@ -157,11 +157,15 @@
 
 	function setOptionsDisplay() {
 		const area = document.getElementById("options");
-		_.each(Object.keys(options.dev), key => {
+		//
+		area.appendChild(document.createTextNode("options.dev: "));
+		area.innerHTML = area.innerHTML.bold();
+		//
+		_.each(Object.keys(options.dev), (key, index) => {
 			const optionCheck = document.createElement("INPUT");
 			const optionLabel = document.createElement("SPAN");
 			//
-			optionLabel.appendChild(document.createTextNode(key+ ": "));
+			optionLabel.appendChild(document.createTextNode(key+ ":"));
 			//
 			optionCheck.type = "checkbox";
 			optionCheck.checked = options.dev[key];
@@ -172,7 +176,9 @@
 			area.appendChild(optionLabel);
 			area.appendChild(optionCheck);
 			//
-			area.appendChild(document.createElement("SPAN").appendChild(document.createTextNode(", ")));
+			if (index < Object.keys(options.dev).length-1) {
+				area.appendChild(document.createElement("SPAN").appendChild(document.createTextNode(", ")));
+			}
 		});
 	}
 
@@ -187,10 +193,10 @@
 
 	function setDevelopment() {
 		if (ACTUAL_MODE === MODE.DEV) {
+			setOptionsDisplay();
 			setGameVersionDisplay(GAME_VERSION);
 			setScreenButtons();
 			setDrawColliders();
-			setOptionsDisplay();
 		}
 	}
 
