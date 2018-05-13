@@ -68,7 +68,7 @@
 
 	function createPlayer() {
 		const states = {};
-		const screens = [ SCREEN.LEVEL1 ];
+		const screens = [ SCREEN.LEVEL1, SCREEN.LEVEL3 ];
 		//
 		states[SPRITE.PLAYERIDLE] = { sprite: SPRITE.PLAYERIDLE, frames: 2, tpf: 500 };
 		//
