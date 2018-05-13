@@ -30,6 +30,7 @@
 			this.clearCanvas();
 			this.execCallbacks('draw');
 			this.execFunctionOnActiveObjects('draw');
+			this.execFunctionOnActiveObjects('drawOnMiniMap');
 			requestAnimFrame(() => { this.draw(); }); // requestAnimFrame uses delta time and adapts the frame rate for a smooth drawing.
 		}
 
@@ -45,7 +46,7 @@
 
 		execFunctionOnActiveObjects(fName) {
 			_.each(this.world, object => {
-				if (object.isActive) object[fName]();
+				if (object.isActive && typeof object[fName] === 'function') object[fName]();
 			});
 		}
 
