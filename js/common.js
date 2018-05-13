@@ -2,12 +2,20 @@
 	'use strict';
 
 	// Here all the reusable functions like random, math, etc
-	window.common = { example, abs , round, pr, hexToRGB };
+	window.common = { example, abs , round, pr, hexToRGB, removeElement, setCss };
 
 	//////////
 
 	function example() {
 		//
+	}
+
+	function removeElement(element) {
+		element.parentNode.removeChild(element);
+	}
+
+	function setCss(id, property, value) {
+		document.getElementById(id).style[property] = value;
 	}
 
 	function cutHex(h) {return (h.charAt(0)=="#") ? h.substring(1,7):h}
