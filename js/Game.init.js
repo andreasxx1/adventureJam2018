@@ -30,7 +30,7 @@
 	window.game = new Game(800, 600, 0.5);
 	//
 	window.options = {
-		dev: { displayOptions: true, displayVersion: true, drawColliders: true, screenTester: true },
+		dev: { displayVersion: true, drawColliders: true, displayScreenButtons: true },
 		player: { id: 'player', constructor: 'Player', index: 0, w: 50, h: 105  },
 		enemy6: { id: 'enemy6', constructor: 'Enemy6', index: 1, w: 655/5, h: 103 }
 	};
@@ -99,7 +99,7 @@
 			return init();
 		})
 		.then(() => {
-			return isDev();
+			return setDevelopment();
 		})
 		.then(() => {
 			game.start(); // Global function from GameInit.js (all the objects that need to be init at the begining here)
@@ -109,11 +109,11 @@
 	// Development mode -> ACTUAL_MODE = MODE.DEV;
 
 	function drawColliders() {
-		const gameWorld = Object.keys(game.world).map(key => { return game.world[key] });
-		const physicsWorld = game.phy.getPhysicalWorld();
-		const objects = (gameWorld).concat(physicsWorld);
-		//
 		if (options.dev.drawColliders) {
+			const gameWorld = Object.keys(game.world).map(key => { return game.world[key] });
+			const physicsWorld = game.phy.getPhysicalWorld();
+			const objects = (gameWorld).concat(physicsWorld);
+			//
 			_.each(objects, obj => {
 				if (obj.weight === -1 || obj.isActive) {
 					game.context.fillStyle ="#FFB6C1";
@@ -126,9 +126,9 @@
 		}
     }
 
-	function setScreenButtons() {
+	function setScreenButtonsDisplay() {
 		const area = document.getElementById("button-area");
-		area.innerHTML = "Choose screens: ".bold();
+		area.innerHTML = "Choose screen: ".bold();
 		//
 		_.each(Object.values(SCREEN), screen => {
 			// Creating button in HTML.
@@ -154,20 +154,52 @@
 	}
 
 
-	function setGameVersion(version) {
+	function setGameVersionDisplay(version) {
 		document.getElementById("version").innerHTML = "Version: ".bold() + version;
 	}
 
-	function setOptions() {
-		document.getElementById("options").innerHTML = "Options: ".bold() + JSON.stringify(options.dev, null, 4);
+	function setOptionsDisplay() {
+		const area = document.getElementById("options");
+		//
+		area.appendChild(document.createTextNode("options.dev: "));
+		area.innerHTML = area.innerHTML.bold();
+		//
+		_.each(Object.keys(options.dev), (key, index) => {
+			const optionCheck = document.createElement("INPUT");
+			const optionLabel = document.createElement("SPAN");
+			//
+			optionLabel.appendChild(document.createTextNode(key+ ":"));
+			//
+			optionCheck.type = "checkbox";
+			optionCheck.checked = options.dev[key];
+			optionCheck.addEventListener("click", function() {
+				options.dev[key] = !options.dev[key];
+				updateElementsVisibility();
+			});
+			area.appendChild(optionLabel);
+			area.appendChild(optionCheck);
+			//
+			if (index < Object.keys(options.dev).length-1) {
+				area.appendChild(document.createElement("SPAN").appendChild(document.createTextNode(", ")));
+			}
+		});
 	}
 
-	function isDev() {
+	function setDrawCollidersCallback() {
+		game.pushCallback('draw', drawColliders);
+	}
+
+	function updateElementsVisibility() {
+		if (options.dev.displayVersion) { common.setCss("version", "visibility", "visible") } else { common.setCss("version", "visibility", "hidden"); }
+		if (options.dev.displayScreenButtons) { common.setCss("button-area", "visibility", "visible"); } else { common.setCss("button-area", "visibility", "hidden"); }
+	}
+
+	function setDevelopment() {
 		if (ACTUAL_MODE === MODE.DEV) {
-			if (options.dev.displayVersion) { setGameVersion(GAME_VERSION); }
-			if (options.dev.drawColliders) { game.pushCallback('draw', drawColliders); }
-			if (options.dev.screenTester) { setScreenButtons(); }
-			if (options.dev.displayOptions) { setOptions(); }
+			setOptionsDisplay();
+			setGameVersionDisplay(GAME_VERSION);
+			setScreenButtonsDisplay();
+			setDrawCollidersCallback();
 		}
 	}
 
