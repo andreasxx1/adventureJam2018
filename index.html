@@ -7,12 +7,13 @@
 	<link type="text/css" rel="stylesheet" href="css/style.css">
 </head>
 <body>
+	<!-- Mongodb -->
+	<script type="text/javascript" src="https://s3.amazonaws.com/stitch-sdks/js/library/v3/stable/stitch.min.js"></script>
 	<!-- Third party dependencies -->
 	<script type="text/javascript" src="dependencies/jquery.js"></script>
 	<script type="text/javascript" src="dependencies/lodash.js"></script>
 
 	<!-- Our Js -->
-	<script type="text/javascript" src="js/main.js"></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript" src="js/Game.js"></script>
 	<script type="text/javascript" src="js/Game.init.js"></script>
@@ -23,20 +24,15 @@
 
 
 	
-	<span>vab.1-beta</span>
+	<div id="version"></div>
 	<br/>
 	<!-- Our canvas -->
 	<canvas>Your browser do not support canvas, we are sorry for you :(</canvas>
 
 	<!-- Temporal for testing -->
 	<div>
-		<div>
-			<span>Select screen:</span>
-			<button>menu</button>
-			<button>level_1</button>
-			<button>level_2</button>
-		</div>
-		<span>Actual screen: "<span id="actualScreen"></span>"</span>
+		<div id="button-area"></div>
+		<div id="actualScreen"></div>
 	</div>
 
 </body>

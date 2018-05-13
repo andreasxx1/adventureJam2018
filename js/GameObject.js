@@ -14,9 +14,8 @@
 			this.isVisible = true; 	 // Affects object visibility.
 			this.isActive = true; 	 // Affects object interaction with the world.
 			this.activeState = null;
-			this.isBoundingboxVisible = true;
 			this.isInstanciated = isInstanciated || true;
-			this.class = constructor;
+			this.classConstructor = constructor; // in case needed 
 
 			// Setting states
 			_.each(Object.keys(states), name => {
@@ -73,11 +72,6 @@
 					}
 
 				}
-				//
-				if (this.isBoundingboxVisible) {
-					game.context.fillStyle = "rgba(255, 0, 255, 0.5)";
-					game.context.fillRect(pox,poy,drw,drh);
-				}
 			}
 		}
 
@@ -111,7 +105,6 @@
 		getScreens() {
 			return this.screens;
 		}
-
 		// Animation
 
 		animate() {
