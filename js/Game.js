@@ -11,6 +11,7 @@
 			this.sprites = [];
 			this.constructors = {};
 			this.sm = new ScreenManager(); // Class below
+			this.callbacks = {};
 		}
 
 		start() {
@@ -19,13 +20,17 @@
 		}
 
 		update() {
-			this.execOnActiveObjects('update');
+			this.updateObjectStatus(); // set isActive flag.
+			this.execCallbacks('update'); // Injected functions (to inject function use pushCallback);
+			this.execFunctionOnActiveObjects('update');
 			setTimeout(() => { this.update(); }, 1000/60); // 1000/60 = 60 frames per seconds.
 		}
 
 		draw() {
 			this.clearCanvas();
-			this.execOnActiveObjects('draw');
+			this.execCallbacks('draw');
+			this.execFunctionOnActiveObjects('draw');
+			this.execFunctionOnActiveObjects('drawOnMiniMap');
 			requestAnimFrame(() => { this.draw(); }); // requestAnimFrame uses delta time and adapts the frame rate for a smooth drawing.
 		}
 
@@ -33,14 +38,24 @@
 			this[name] = new this.constructors[constructorName](_.assign(...args, { constructor: this.constructors[constructorName] } ));
 		}
 
-		execOnActiveObjects(fName) {
+		updateObjectStatus() {
 			_.each(this.world, object => {
-				if (object.getScreens().some(screen => {
-					return screen === this.sm.getActiveScreen();
-				})) {
-					object[fName]();
-				}
+				object.isActive = object.getScreens().some(screen => { return screen === this.sm.getActiveScreen() });
 			});
+		}
+
+		execFunctionOnActiveObjects(fName) {
+			_.each(this.world, object => {
+				if (object.isActive && typeof object[fName] === 'function') object[fName]();
+			});
+		}
+
+		execCallbacks(cName) {
+			if (this.callbacks[cName]) this.callbacks[cName]();
+		}
+
+		pushCallback(cName, callback) {
+			this.callbacks[cName] = callback;
 		}
 
 		createObject(object) {
