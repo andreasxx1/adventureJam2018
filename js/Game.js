@@ -11,6 +11,7 @@
 			this.sprites = [];
 			this.constructors = {};
 			this.sm = new ScreenManager(); // Class below
+			this.callbacks = { draw: [], update: [] };
 		}
 
 		start() {
@@ -20,12 +21,14 @@
 
 		update() {
 			this.execOnActiveObjects('update');
+			_.each(this.callbacks.update, callback => { callback(); });
 			setTimeout(() => { this.update(); }, 1000/60); // 1000/60 = 60 frames per seconds.
 		}
 
 		draw() {
 			this.clearCanvas();
 			this.execOnActiveObjects('draw');
+			_.each(this.callbacks.draw, callback => { callback(); });
 			requestAnimFrame(() => { this.draw(); }); // requestAnimFrame uses delta time and adapts the frame rate for a smooth drawing.
 		}
 
@@ -71,6 +74,10 @@
 			this.context.clearRect(0, 0, this.width, this.height);
 		}
 
+		addCallback(type, callback) {
+			if (this.callbacks[type]) { this.callbacks[type].push(callback); }
+		}
+
 	};
 
 	class ScreenManager {
@@ -109,10 +116,17 @@
 		setActiveScreen(screen) {
 			this.lastActiveScreen = this.activeScreen;
 			this.activeScreen = screen;
+			this.displayActualScreenInHtml(); // Temporal testing
 		}
 
 		backToLastActiveScreen() {
 			this.activeScreen = this.lastActiveScreen;
+		}
+
+		// Temporal testing		
+
+		displayActualScreenInHtml() {
+			document.getElementById("actualScreen").innerHTML = this.getActiveScreen();
 		}
 	}
 

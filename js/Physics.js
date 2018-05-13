@@ -107,11 +107,11 @@
           weight: -1
         }),
         new Collider({
-          id: 'right-wall',
-          x: game.width,
-          y: game.height - 5000,
-          w: 10000,
-          h: 10000,
+          id: 'platform-2',
+          x: 700,
+          y: 0,
+          w: 100,
+          h: game.height,
           weight: -1
         }),
         new Collider({
@@ -178,6 +178,10 @@
           Physics.collision('imm', col, obj)
         }
       })
+    }
+
+    getPhysicalWorld() {
+      return this.physicalWorld;
     }
 
     update(id){
