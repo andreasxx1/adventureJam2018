@@ -116,10 +116,13 @@
 			//
 			_.each(objects, obj => {
 				if (obj.weight === -1 || obj.isActive) {
-					game.context.fillStyle = "#666666";
+					game.context.fillStyle ="#FFB6C1";
+					let alpha = game.context.globalAlpha
+					game.context.globalAlpha = 0.3;
 					game.context.fillRect((obj.pos ? obj.pos.x : obj.x), (obj.pos ? obj.pos.y : obj.y), (obj.dim ? obj.dim.x : obj.width), (obj.dim ? obj.dim.y : obj.height));
+					game.context.globalAlpha = alpha;
 				}
-			});	
+			});
 		}
     }
 
@@ -133,14 +136,14 @@
 			// Config.
 			button.id = screen;
 			button.appendChild(document.createTextNode(screen));
-			button.addEventListener("click", function() { 
-				game.sm.go(screen); 
+			button.addEventListener("click", function() {
+				game.sm.go(screen);
 		    	// Cleaning all buttons.
 				_.each(Object.values(SCREEN), screen => {
 					if (document.getElementById(screen)) document.getElementById(screen).style.backgroundColor = '#FFF';
 				});
 				// Set active button background.
-		    	button.style.backgroundColor = '#CCC'; 
+		    	button.style.backgroundColor = '#CCC';
 			});
 			//
 			// Pushing button in html.

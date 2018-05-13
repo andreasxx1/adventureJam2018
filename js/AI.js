@@ -60,7 +60,6 @@
 			}else{
 				this.jp = false;
 			}
-
 			this.isCollidingPlayer();
 
 			//update positions
@@ -91,5 +90,4 @@
 	}
 
 	game.constructors.Enemy6 = Enemy6;
-
 })();

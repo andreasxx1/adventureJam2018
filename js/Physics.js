@@ -20,7 +20,7 @@
       this.y = 0;
     }
     unit(){
-     this.div(this.mag());
+     if(this.mag() !== 0) this.div(this.mag());
      return this
     }
     copy(){
@@ -50,10 +50,20 @@
 		mag(){
 			return Math.sqrt(this.x * this.x + this.y * this.y)
 		}
+    magsq(){
+      return this.x * this.x + this.y * this.y
+    }
 		mul(scalar){
       if(scalar !== NaN) this.x *= scalar, this.y *= scalar;
       return this
 		}
+    mulVec(vec){
+      if(vec.constructor.name === 'Vector'){
+        this.x *= vec.x;
+        this.y *= vec.y;
+      }
+      return this
+    }
     div(scalar){
       if(scalar !== NaN) this.x /= scalar,  this.y /= scalar;
       return this
@@ -79,11 +89,11 @@
       this.blockLeft = false
       //
       this.world = {
-        floor: ['main-floor'],
+        floors: ['main-floor', 'platform'],
         walls: ['left-wall', 'right-floor'],
         obstacles: [],
-        airDrag: 0.95,
-        groundDrag: 0.95,
+        drag: new Vector(0.10, 0.03),
+        groundFriction: 0.04,
         grav: 10
       }
       this.physicalWorld = [
@@ -162,17 +172,19 @@
       let col = this.getCol(id)
       col.acc.add({y: -height })
     }
+    Dash(id, dist){
+      let col = this.getCol(id)
+      col.acc.add({x: dist})
+    }
     collideWithObjects(col){
       ///collide with all other object in the physical world
     }
     collideWithImmovableObjects(col){
-      let touch = ''
       _.forEach(this.physicalWorld, obj => {
         if(obj.id !== col.id && obj.weight === -1){
-          touch += Physics.collision('imm', col, obj)
+          Physics.collision('imm', col, obj)
         }
       })
-      col.floorId = touch
     }
 
     getPhysicalWorld() {
@@ -180,15 +192,15 @@
     }
 
     update(id){
-      ///quickfix local static delta of 1000/60
+      ///quickfix local static delta of 1/60
       let delta = 1000/60;
       const col = this.getCol(id)
 
       ///MAKE A STEP INTO THE FUTURE(DELTA) BY CHANGING
       ///THE POSITION BASED ON THE VELOCITY
-      col.pos.add(col.vel.copy().div(delta))
-
-      ///for the sake of fixing floating point numbers
+      col.pos.add(col.vel.copy().div(delta * col.weight))
+      //pr(col.pos)
+      ///for the sake of fixing floating point numbersw
       //we round everything in the collider to the 3rd percision
       //this.refineCollider(col)
 
@@ -206,16 +218,9 @@
       ///gravity
       col.acc.add({y: this.world.grav})
 
-      ///airDrag
-      col.acc.mul(this.world.airDrag)
-      /*place for adding wind*/
+      col.acc.add(this.getDrag(col))
 
-      ///groundDrag
-      if(this.isOnFloor(col)){
-        col.acc.mul(this.world.groundDrag)
-      }
-
-      ///NOW THAT ALL THE FORCES HAVE BEEN ADDED
+      //NOW THAT ALL THE FORCES HAVE BEEN ADDED
       ///WE UPDATE THE VELOCITY WHICH WILL BE USED
       ///IN THE NEXT UPDATE CALL
       col.vel.add(col.acc)
@@ -255,8 +260,9 @@
           x2 = (ri1 <= le2),
           y1 = (dw1 <= up2),
           y2 = (dw2 <= up1),
-          coll = !(x1 || x2) && !(y1 || y2),
-          touch = coll ? collider2.id : ''
+          coll = !(x1 || x2) && !(y1 || y2)
+
+
 
       if(coll && mode == 'imm'){
         let back = v1.copy().mul(-1),
@@ -288,7 +294,8 @@
           rest.y = 0
           newVel.y = 0
         }else{
-          throw 'unhandled collision uccured'
+          console.log(collider1, collider2)
+          throw 'unhandled collision'
         }
 
         newPos = p1.add(backdir)
@@ -297,12 +304,31 @@
         collider1.pos = newPos
         collider1.vel = newVel
       }
-      return touch
+    }
+    getDrag(col){
+      let f,d = col.vel.copy().mul(-1)
+      ///
+      f = this.world.drag.copy()
+      ///
+      if(this.isOnFloor(col)){
+        f.x += this.world.groundFriction
+      }
+      ///
+      return d.mulVec(f)
     }
 
     isOnFloor(col){
-      if(typeof col === 'object') return col.floorId.length !== 0
-      if(typeof col === 'string') return this.getCol(col).floorId !== ""
+      if(typeof col === 'string') col = this.getCol(col)
+      let isonfloor = false;
+      _.each(this.physicalWorld, (f) => {
+        if(_.includes(this.world.floors, f.id)){
+          let isY = col.pos.y + col.dim.y === f.pos.y
+          let isX1 = (col.pos.x+col.dim.x < f.pos.x),
+              isX2 = (col.pos.x > f.pos.x+f.dim.x)
+          isonfloor = (isY && !isX1 && !isX2) || isonfloor
+        }
+      })
+      return isonfloor
     }
     refineCollider(col){
         col.pos.flb()
