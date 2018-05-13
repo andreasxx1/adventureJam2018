@@ -21,7 +21,7 @@
 	window.SPRITE_FORMAT = '.png';
 	//
 	window.SPRITE = { PLAYERIDLE: 'player_idle', MOB6ATT: 'mob6attack' };
-	window.SCREEN = { MENU: 'menu', GAMEOVER: 'gameover', LEVEL1: 'level_1', LEVEL2: 'level_2' };
+	window.SCREEN = { MENU: 'menu', GAMEOVER: 'gameover', LEVEL1: 'level_1', LEVEL2: 'level_2', LEVEL3: 'level_3' };
 	window.MODE = { DEV: 'dev', GAME: 'game' };
 	//
 	window.ACTUAL_MODE = MODE.DEV;
@@ -57,7 +57,7 @@
 
 	function createEnemy6() {
 		const states = {};
-		const screens = [ SCREEN.LEVEL1, SCREEN.LEVEL2 ];
+		const screens = [ SCREEN.LEVEL2, SCREEN.LEVEL3 ];
 		//
 		states[SPRITE.MOB6ATT] = { sprite: SPRITE.MOB6ATT, frames: 5, tpf: 250 };
 		//
