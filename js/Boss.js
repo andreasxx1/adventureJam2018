@@ -38,7 +38,6 @@
             this.bossState('OFFENSIVE');
             
             
-            
             //update positions
             {
             let {x, y} = this.move(this.id)
@@ -79,7 +78,7 @@
 
         towardsPlayer(){
             let {x,y} = phy.distanceTo(this.id, this.playerInstance.id); 
-
+            
             if(x < 0){
                 if(!(abs(x) < this.offensiveDistance)){
                     this.moveLeft();
@@ -94,11 +93,14 @@
         
         changeMoveSpeed(howFast){
             switch(howFast){
-                case BERSERKER:
+                case 'BERSERKER':
                     this.walkSpeed = 6;
                     break;
-                case FASTER:
+                case 'FASTER':
                     this.walkSpeed = 4;
+                    break;
+                case 'STOPPED':
+                    this.walkSpeed = 0;
                     break;
                 default:
                     this.walkSpeed = 2;
