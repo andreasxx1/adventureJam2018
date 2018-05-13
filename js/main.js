@@ -2,7 +2,7 @@
 	'use strict'; // Add some rules/errors on bad javascript practices or that I believe.
 
 	// Globals;
-	window.KEY = { SP: 32, LE: 37, UP: 38, RI: 39, DO: 40, A: 65, D: 68, X: 88 };
+	window.KEY = { SP: 32, LE: 37, UP: 38, RI: 39, DO: 40, A: 65, D: 68, X: 88, SH: 16 };
 	window.SCREEN = { MENU: 'menu', BACKGROUND: 'background', LEVEL1: 'level_1', INTERFACE: 'interface' };
 	window.ASSETS_FOLDER = 'assets/';
 	window.SPRITE_FORMAT = '.png';

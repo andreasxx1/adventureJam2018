@@ -85,8 +85,8 @@
         floors: ['main-floor', 'platform'],
         walls: ['left-wall', 'right-floor'],
         obstacles: [],
-        airDrag: 0.01,
-        groundDrag: 0.5,
+        airDrag: 0.03,
+        groundDrag: 0.15,
         grav: 10
       }
       this.physicalWorld = [
@@ -165,6 +165,10 @@
       let col = this.getCol(id)
       col.acc.add({y: -height })
     }
+    Dash(id, dist){
+      let col = this.getCol(id)
+      col.acc.add({x: dist})
+    }
     collideWithObjects(col){
       ///collide with all other object in the physical world
     }
@@ -204,23 +208,17 @@
       col.acc.add({y: this.world.grav})
 
       ///airDrag
-      //let airdrag = this.world.airDrag * col.vel.magsq()
-      //let airforce = col.vel.copy().unit().mul(airdrag * -1)
-      let vfds = col.vel.copy().mul(this.world.airDrag * -1)
-      pr(col.vel)
-      pr(vfds)
-      pr(col.vel.x * -1 * this.world.airDrag, col.vel.y * -1 * this.world.airDrag)
-      col.acc.add(vfds)
-      //col.acc.add(airforce)
+      let f = col.vel.copy().mul(this.world.airDrag * -1)
+      col.acc.add(f)
+
       /*place for adding wind*/
 
       ///groundDrag
-      //if(this.isOnFloor(col)){
-        //let floordrag = this.world.groundDrag * col.vel.magsq()
-        //let floorforce = col.vel.copy().unit().mul(floordrag * -1)
-      //  col.acc.add(floorforce)
-      //  pr(floordrag)
-      //}
+      if(this.isOnFloor(col)){
+        let f = col.vel.x * this.world.groundDrag * -1
+        col.acc.x += f;
+      }
+
 
       ///NOW THAT ALL THE FORCES HAVE BEEN ADDED
       ///WE UPDATE THE VELOCITY WHICH WILL BE USED

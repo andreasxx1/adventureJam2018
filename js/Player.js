@@ -11,12 +11,12 @@
 				super({id, x, y, w, h, states, screens, constructor, index})
 				///jump cooldown, lol like flies can have infinit jump for fly
 				this.jc = 0;
-				this.jp = false;
+				this.jp = 0;
 
 				this.vals = {
-					walkSpeed: 4,
-					runSpeed: 10,
-					jumpHeight: 250,
+					walkSpeed: 10,
+					runSpeed: 30,
+					jumpHeight: 200,
 					dashDist: 100
 				}
 				this.move = phy.addToPhysicalWorld({
@@ -30,17 +30,14 @@
 			if(game.pressedKeys[KEY.LE]) this.moveLeft();
 			if(game.pressedKeys[KEY.RI]) this.moveRight();
 			if(game.pressedKeys[KEY.SP]) {
-				if(!this.jp){
-					this.jp = true
+				if(this.jp < 2){
+					this.jp++
 					this.jump();
 				}
 			}else{
 				this.jp = false;
 			}
-			if (game.pressedKeys[KEY.SH]){
-				console.log(JSON.stringify(phy.getCol('player')))
-			}
-
+			//console.log(game.pressedKeys[KEY.SH])
 
 			//update positions
 			{
@@ -50,14 +47,18 @@
 			}
 		}
 		moveLeft() {
-			game.pressedKeys[KEY.SH]
-			? phy.Left(this.id, this.vals.walkSpeed)
-			: phy.Left(this.id, this.vals.runSpeed)
+			if(phy.isOnFloor(this.id) && game.pressedKeys[KEY.SH]){
+				phy.Left(this.id, this.vals.runSpeed)
+			}else{
+				phy.Left(this.id, this.vals.walkSpeed)
+			}
 		}
 		moveRight(){
-			game.pressedKeys[KEY.SH]
-			? phy.Right(this.id, this.vals.walkSpeed)
-			: phy.Right(this.id, this.vals.runSpeed)
+			if(phy.isOnFloor(this.id) && game.pressedKeys[KEY.SH]){
+				phy.Right(this.id, this.vals.runSpeed)
+			}else{
+				phy.Right(this.id, this.vals.walkSpeed)
+			}
 		}
 		jump(){
 			if(phy.isOnFloor(this.id)){
@@ -65,7 +66,7 @@
 			}
 		}
 		dash(){
-			///todo dash physics
+
 		}
 	}
 
