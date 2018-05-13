@@ -85,8 +85,10 @@
         floors: ['main-floor', 'platform'],
         walls: ['left-wall', 'right-floor'],
         obstacles: [],
-        airDrag: 0.03,
-        groundDrag: 0.15,
+        drag: {
+          air: new Vector(0.13, 0.03),
+          groud: new Vector(0.02, 0)
+        },
         grav: 10
       }
       this.physicalWorld = [
@@ -191,7 +193,9 @@
 
       ///MAKE A STEP INTO THE FUTURE(DELTA) BY CHANGING
       ///THE POSITION BASED ON THE VELOCITY
-      col.pos.add(col.vel.copy().div(delta))
+
+      col.pos.add(col.vel.copy().div(delta * (1/col.weight)))
+      console.log(col.id, col.vel);
       //pr(col.pos)
       ///for the sake of fixing floating point numbersw
       //we round everything in the collider to the 3rd percision
@@ -210,6 +214,8 @@
 
       ///gravity
       col.acc.add({y: this.world.grav})
+
+      //col.acc.add(this.Drag(col))
 
       ///airDrag
       let f = col.vel.copy().mul(this.world.airDrag * -1)
@@ -266,6 +272,8 @@
           y2 = (dw2 <= up1),
           coll = !(x1 || x2) && !(y1 || y2)
 
+        console.log(collider1, collider2)
+
       if(coll && mode == 'imm'){
         let back = v1.copy().mul(-1),
             backdir = back.unit(),
@@ -296,7 +304,7 @@
           rest.y = 0
           newVel.y = 0
         }else{
-          console.log(xmul, ymul)
+          console.log(collider1, collider2)
           throw 'unhandled collision'
         }
 
@@ -306,6 +314,11 @@
         collider1.pos = newPos
         collider1.vel = newVel
       }
+    }
+    Drag(col){
+      let d = this.world.drag.air.copy()
+      d.add(this.world.drag.ground)
+
     }
 
     isOnFloor(col){
