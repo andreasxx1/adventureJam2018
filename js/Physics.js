@@ -79,6 +79,7 @@
     constructor(){
       this.Vector = Vector
       this.Collider = Collider
+      this.blockLeft = false
       //
       this.world = {
         floors: ['main-floor', 'platform'],
@@ -151,7 +152,10 @@
     }
     Left(id, speed){
       let col = this.getCol(id)
-      col.acc.add({x: -speed})
+      console.log(col.acc.x);
+      if(col.acc.x === 0 || !this.blockLeft){
+        col.acc.add({x: -speed})
+      }
     }
     Right(id, speed){
       let col = this.getCol(id)
@@ -261,7 +265,6 @@
           coll = !(x1 || x2) && !(y1 || y2)
 
       if(coll && mode == 'imm'){
-
         let back = v1.copy().mul(-1),
             backdir = back.unit(),
 

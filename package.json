@@ -1,0 +1,27 @@
+{
+  "name": "adventure_jam",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "open index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andreasxx1/adventureJam2018.git"
+  },
+  "keywords": [
+    "adventure",
+    "jam",
+    "2018"
+  ],
+  "author": "high people",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andreasxx1/adventureJam2018/issues"
+  },
+  "homepage": "https://github.com/andreasxx1/adventureJam2018#readme",
+  "dependencies": {
+    "node-json-db": "^0.7.5"
+  }
+}
