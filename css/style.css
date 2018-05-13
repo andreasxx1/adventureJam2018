@@ -1,3 +1,2 @@
-canvas {
-	background-color: #777;
-}
+canvas { background-color: #777; }
+#options { position: absolute; float: left; left: 970px; top: 20px; }

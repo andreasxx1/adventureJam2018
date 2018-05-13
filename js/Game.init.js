@@ -27,7 +27,7 @@
 	window.ACTUAL_MODE = MODE.DEV;
 
 	// Game instance.
-	window.game = new Game(800, 600, 0.5);
+	window.game = new Game(960, 640, 0.5);
 	//
 	window.options = {
 		dev: { displayVersion: true, drawColliders: true, displayScreenButtons: true },
@@ -116,9 +116,9 @@
 			//
 			_.each(objects, obj => {
 				if (obj.weight === -1 || obj.isActive) {
-					game.context.fillStyle ="#FFB6C1";
 					let alpha = game.context.globalAlpha
 					game.context.globalAlpha = 0.3;
+					game.context.fillStyle ="#FFB6C1";
 					game.context.fillRect((obj.pos ? obj.pos.x : obj.x), (obj.pos ? obj.pos.y : obj.y), (obj.dim ? obj.dim.x : obj.width), (obj.dim ? obj.dim.y : obj.height));
 					game.context.globalAlpha = alpha;
 				}
@@ -165,23 +165,23 @@
 		area.innerHTML = area.innerHTML.bold();
 		//
 		_.each(Object.keys(options.dev), (key, index) => {
+			// 
+			area.appendChild(document.createElement("SPAN").appendChild(document.createElement("br")));
+			// 
 			const optionCheck = document.createElement("INPUT");
 			const optionLabel = document.createElement("SPAN");
 			//
-			optionLabel.appendChild(document.createTextNode(key+ ":"));
+			optionLabel.appendChild(document.createTextNode(key));
 			//
 			optionCheck.type = "checkbox";
 			optionCheck.checked = options.dev[key];
 			optionCheck.addEventListener("click", function() {
 				options.dev[key] = !options.dev[key];
-				updateElementsVisibility();
+				updateElementsDisplay();
 			});
-			area.appendChild(optionLabel);
 			area.appendChild(optionCheck);
+			area.appendChild(optionLabel);
 			//
-			if (index < Object.keys(options.dev).length-1) {
-				area.appendChild(document.createElement("SPAN").appendChild(document.createTextNode(", ")));
-			}
 		});
 	}
 
@@ -189,9 +189,9 @@
 		game.pushCallback('draw', drawColliders);
 	}
 
-	function updateElementsVisibility() {
-		if (options.dev.displayVersion) { common.setCss("version", "visibility", "visible") } else { common.setCss("version", "visibility", "hidden"); }
-		if (options.dev.displayScreenButtons) { common.setCss("button-area", "visibility", "visible"); } else { common.setCss("button-area", "visibility", "hidden"); }
+	function updateElementsDisplay() {
+		if (options.dev.displayVersion) { common.setCss("version", "display", "") } else { common.setCss("version", "display", "none"); }
+		if (options.dev.displayScreenButtons) { common.setCss("button-area", "display", ""); } else { common.setCss("button-area", "display", "none"); }
 	}
 
 	function setDevelopment() {
