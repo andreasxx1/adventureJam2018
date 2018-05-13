@@ -30,7 +30,7 @@
 	window.game = new Game(800, 600, 0.5);
 	//
 	window.options = {
-		dev: { displayVersion: true, drawColliders: true, screenTester: true },
+		dev: { displayOptions: true, displayVersion: true, drawColliders: true, screenTester: true },
 		player: { id: 'player', constructor: 'Player', index: 0, w: 50, h: 105  },
 		enemy6: { id: 'enemy6', constructor: 'Enemy6', index: 1, w: 655/5, h: 103 }
 	};
@@ -125,6 +125,7 @@
 
 	function setScreenButtons() {
 		const area = document.getElementById("button-area");
+		area.innerHTML = "Choose screens: ".bold();
 		//
 		_.each(Object.values(SCREEN), screen => {
 			// Creating button in HTML.
@@ -151,7 +152,11 @@
 
 
 	function setGameVersion(version) {
-		document.getElementById("version").innerHTML = "Version: " + version;
+		document.getElementById("version").innerHTML = "Version: ".bold() + version;
+	}
+
+	function setOptions() {
+		document.getElementById("options").innerHTML = "Options: ".bold() + JSON.stringify(options.dev, null, 4);
 	}
 
 	function isDev() {
@@ -159,6 +164,7 @@
 			if (options.dev.displayVersion) { setGameVersion(GAME_VERSION); }
 			if (options.dev.drawColliders) { game.pushCallback('draw', drawColliders); }
 			if (options.dev.screenTester) { setScreenButtons(); }
+			if (options.dev.displayOptions) { setOptions(); }
 		}
 	}
 
