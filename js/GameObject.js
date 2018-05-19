@@ -2,7 +2,7 @@
 	'use strict';
 
 	class GameObject {
-		constructor({ id, x, y, w, h, states, screens, index, constructor, isInstanciated  }) {
+		constructor({ id, x, y, w, h, states, screens, index, constructor, isAbstract  }) { // constructor automatically added on game.instantiate function.
 			this.id = id || 'gameObject';
 			this.x = x || 0;
 			this.y = y || 0;
@@ -14,22 +14,24 @@
 			this.isVisible = true; 	 // Affects object visibility.
 			this.isActive = true; 	 // Affects object interaction with the world.
 			this.activeState = null;
-			this.isInstanciated = isInstanciated || true;
-			this.classConstructor = constructor; // in case needed 
+			this.classConstructor = constructor; // Just a string with the constructor name in case needed (all constructors in game.constructors);
 			this.isRotated = false;
+			this.isAbstract = isAbstract || false; // Objects that aren't drawn
 
 			// Setting states
-			_.each(Object.keys(states), name => {
-				this.states[name] = {
-					sprite: name,
-					frames: states[name].frames,
-					tpf: states[name].tpf,
-					frame: 0
-				};
-				if (!this.activeState) {
-					this.activeState = this.states[name];
-				}
-			});
+			if (states && !isAbstract) {
+				_.each(Object.keys(states), name => {
+					this.states[name] = {
+						sprite: name,
+						frames: states[name].frames,
+						tpf: states[name].tpf,
+						frame: 0
+					};
+					if (!this.activeState) {
+						this.activeState = this.states[name];
+					}
+				});
+			}
 			//
 			this.initialize();
 
@@ -38,14 +40,15 @@
 		//////////
 
 		initialize() {
-			if (this.isInstanciated) {
-				game.createObject(this);
+			game.createObject(this);
+			//
+			if (this.states && !this.isAbstract) {
 				this.animate();
 			}
 		}
 
 		draw() {
-			if (this.isActive && this.activeState) {
+			if (this.isActive && !this.isAbstract && this.activeState) {
 				//
 				const img = this.getActiveSprite();
 				const frx = (img.width / this.activeState.frames) * this.activeState.frame;
@@ -76,8 +79,8 @@
 		}
 
 		update() {
-			if (this.isActive && this.activeState) {
-
+			if (this.isActive && (this.activeState || this.isAbstract)) {
+				
 			}
 		}
 

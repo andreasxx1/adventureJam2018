@@ -11,7 +11,8 @@
 			this.sprites = [];
 			this.constructors = {};
 			this.sm = new ScreenManager(); // Class below
-			this.callbacks = {};
+			this.modes = window.MODES; // active modes (see modes in js/modes.js and GameInit.js -> window.MODES).
+ 			this.callbacks = {};
 		}
 
 		start() {
@@ -19,16 +20,18 @@
 			this.draw();
 		}
 
+		// ToDo: clean draw and update functions.
+
 		update() {
 			this.updateObjectStatus(); // set isActive flag.
-			this.execCallbacks('update'); // Injected functions (to inject function use pushCallback);
+			this.execCallbacks('update'); // Injected functions for updating (to inject function use pushCallback);
 			this.execFunctionOnActiveObjects('update');
 			setTimeout(() => { this.update(); }, 1000/60); // 1000/60 = 60 frames per seconds.
 		}
 
 		draw() {
 			this.clearCanvas();
-			this.execCallbacks('draw');
+			this.execCallbacks('draw'); // Injected functions for drawing (to inject function use pushCallback)
 			this.execFunctionOnActiveObjects('draw');
 			this.execFunctionOnActiveObjects('drawOnMiniMap');
 			requestAnimFrame(() => { this.draw(); }); // requestAnimFrame uses delta time and adapts the frame rate for a smooth drawing.
@@ -63,6 +66,31 @@
 			this.reArrangeWorld();
 		}
 
+		destroyObject(id) {
+			const index = this.getWorldObjectById(id, true, false);
+			//
+			this.world.splice(index, 1);
+			//		
+			delete this[name];
+			//
+			this.reArrangeWorld();
+		}
+
+		getWorldObjectById(id, isIndex=false, isObject=true) {
+			let index = null;
+			let object = null;
+			//
+			for (let i = 0; i < this.world.length; i++) {
+				if (this.world[i].id === id) {
+					index = i;
+					object = this.world[i];
+					break;
+				}
+			}
+			//
+			return isObject && isIndex ? [object, index] : (isIndex ? index : (isObject ? object : null))  ;
+		}
+
 		reArrangeWorld() {
 			_.sortBy(this.world, a => {'index'});
 		}
@@ -84,6 +112,20 @@
 
 		clearCanvas() {
 			this.context.clearRect(0, 0, this.width, this.height);
+		}
+
+		startMode(mode) {
+			if (!this.modes.some(m => m === mode)) {
+				this.modes.push(mode);
+			}
+		}
+
+		stopMode(mode) {
+			const index = this.modes.indexOf(mode);
+			//
+			if (index !== -1) { 
+				this.modes.splice(index, 1);
+			}
 		}
 
 	};

@@ -16,8 +16,8 @@
 
 	// test enemy
 	class Enemy6 extends GameObject {
-		constructor({id, x, y, w, h, states, screens, constructor, index}){
-				super({id, x, y, w, h, states, screens, constructor, index});
+		constructor({ id, x, y, w, h, states, screens, index }){
+				super({ id, x, y, w, h, states, screens, index, constructor: 'Enemy6' });
 				this.AI = new game.constructors.AI;
 				this.isColliding = { x: false, y: false };
 
@@ -48,18 +48,7 @@
 
 		update() {
 			super.update();
-
-			//handle inputs
-			// if(game.pressedKeys[KEY.LE]) { this.moveLeft(); }
-			// if(game.pressedKeys[KEY.RI]) { this.moveRight(); }
-			// if(game.pressedKeys[KEY.SP]) {
-			// 	if (!this.jp) {
-			// 		this.jp = true
-			// 		this.jump();
-			// 	}
-			// }else{
-			// 	this.jp = false;
-			// }
+			
 			this.isCollidingPlayer();
 
 			//update positions

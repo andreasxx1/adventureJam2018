@@ -1,7 +1,21 @@
 (function() {
 	'use strict';
 
-	////////// Development mode -> when: window.ACTUAL_MODE = window.MODE.DEV (ACTUAL_MODE = MODE.DEV).
+	/*
+		Here we'll add different game modes that affect in some way the gameplay (ingame or html/css).
+
+		Examples: 
+		- Development mode: to display development options.
+		- Debuffs: players is poisoned or in any effect that distort the game (view/gameplay/etc).
+		- Cheat codes / easter eggs: flying mode, god mode, etc.
+
+		Important: 
+		1. all game modes should have a start and stop functions:
+			- in case is creating external html/css elements (start creates them and stop destroys them);
+			- in case is a debuff then start set a game.mode.your_mode_name.your_flag_name = true (could be more than one flag, by example isPlayerPoisoned: true, isNight: true, etc...);
+		2. all game modes should be instanciated at the end of this file:
+			- all of them are inactive till the start function is called (and active till the stop function is called).
+	*/	
 
 	class DevelopmentEnvironment {
 		constructor() {}
@@ -14,7 +28,7 @@
 		}
 
 		drawColliders() {
-			if (options.dev.drawColliders) {
+			if (options.modes.dev.drawColliders) {
 				const gameWorld = Object.keys(game.world).map(key => { return game.world[key] });
 				const physicsWorld = game.phy.getPhysicalWorld();
 				const objects = (gameWorld).concat(physicsWorld);
@@ -68,7 +82,7 @@
 			area.appendChild(document.createTextNode("development options: "));
 			area.innerHTML = area.innerHTML.bold();
 			//
-			_.each(Object.keys(options.dev), (key, index) => {
+			_.each(Object.keys(options.modes.dev), (key, index) => {
 				// 
 				area.appendChild(document.createElement("SPAN").appendChild(document.createElement("br")));
 				// 
@@ -78,9 +92,9 @@
 				optionLabel.appendChild(document.createTextNode(key));
 				//
 				optionCheck.type = "checkbox";
-				optionCheck.checked = options.dev[key];
+				optionCheck.checked = options.modes.dev[key];
 				optionCheck.addEventListener("click", () => {
-					options.dev[key] = !options.dev[key];
+					options.modes.dev[key] = !options.modes.dev[key];
 					this.updateElementsDisplay();
 				});
 				area.appendChild(optionCheck);
@@ -94,15 +108,15 @@
 		}
 
 		updateElementsDisplay() {
-			if (options.dev.displayVersion) { common.setCss("version", "display", "") } else { common.setCss("version", "display", "none"); }
-			if (options.dev.displayScreenButtons) { common.setCss("button-area", "display", ""); } else { common.setCss("button-area", "display", "none"); }
+			if (options.modes.dev.displayVersion) { common.setCss("version", "display", "") } else { common.setCss("version", "display", "none"); }
+			if (options.modes.dev.displayScreenButtons) { common.setCss("button-area", "display", ""); } else { common.setCss("button-area", "display", "none"); }
 		}
 
 	}
-
-	////////// Other environments here (maybe one pseudo "easter" egg activated with the konami code).
-
-	// Create environment mode.
-	game.dev = new DevelopmentEnvironment();
+	
+	// All game modes instances here.
+	game.mode = {
+		dev: new DevelopmentEnvironment()
+	}
 
 })();

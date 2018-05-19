@@ -1,18 +1,9 @@
 /* 
-	To ad version to each change:
-
-	ab = Andreas
-	aq = Andre
-	sb = Stephan
-
-	Version convention:
-	for each push change the version in the index.html and add the change description here.
 	
-	example: v.ab.1-beta
 */
 
 ####################
-#	v.ab.1-beta	   #
+#	v0.0.1-beta	   #
 ####################
 date: dd.mm.yyyy
 changes: 

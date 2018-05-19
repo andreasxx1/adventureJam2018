@@ -1,0 +1,4 @@
+Funciona únicamente con el teclado,
+Con las flechas arriba y abajo se moverá el selector entre las opciones de NEW GAME, CONTROSL Y CREDITS
+Se selecciona con espacio
+cuando se selcciona el selector es un poco menos transparente
