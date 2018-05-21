@@ -6,7 +6,7 @@
 
 	//////////
 
-	function sortBy(array, property) {
+	function sortBy(array, property) { // sort by only one property (ToDo if needed sort for more than one).
 	    return array.sort((a, b) => {
 	        return a[property] - b[property];
 	    });

@@ -55,7 +55,8 @@
 				// Config.
 				button.id = screen;
 				button.appendChild(document.createTextNode(screen));
-				button.addEventListener("click", function() {
+				//
+				button.addEventListener("click", () => {
 					game.sm.go(screen);
 			    	// Cleaning all buttons.
 					_.each(Object.values(SCREEN), screen => {

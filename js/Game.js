@@ -98,14 +98,14 @@
 
 		load() {
 			return new Promise(resolve => {
-				const spriteNames = Object.keys(SPRITE).map(key => SPRITE[key]);
+				const sprites = Object.keys(SPRITE).map(key => SPRITE[key]);
 				//
-				_.each(spriteNames, (spriteName, index) => {
-					if (!_.has(game.sprites, spriteName)){
-						game.sprites[spriteName] = new Image();
-						game.sprites[spriteName].src = ASSETS_FOLDER + spriteName + SPRITE_FORMAT;
+				_.each(sprites, (name, index) => {
+					if (!_.has(game.sprites, name)){
+						game.sprites[name] = new Image();
+						game.sprites[name].src = ASSETS_FOLDER + name + SPRITE_FORMAT;
 					}
-					if (index+1 >= spriteNames.length) {
+					if (index+1 >= sprites.length) {
 						resolve();
 					}
 				});

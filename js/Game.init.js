@@ -14,15 +14,18 @@
 	}());
 	//
 	window.KEY = { SP: 32, LE: 37, UP: 38, RI: 39, DO: 40, A: 65, D: 68, X: 88 };
-	window.GAME_VERSION = "0.0.1-beta";
+	window.GAME_VERSION = "0.0.2-beta";
 	window.ASSETS_FOLDER = 'assets/';
 	window.SPRITE_FORMAT = '.png';
 	window.MODES = ['dev']; // forced modes on game.init;
 	//
 	window.SPRITE = { 
 		PLAYERIDLE: 'player_idle', PLAYERRUN: 'player_run', PLAYERJUMP: 'player_jump', 
+		//
 		MOB6ATT: 'mob6attack',
-		STARTBUTTON: 'start_button', CONTROLSBUTTON: 'controls_button', CREDITSBUTTON: 'credits_button', MENUBG: 'fd_menu_bg'
+		//
+		STARTBUTTON: 'start_button', CONTROLSBUTTON: 'controls_button', CREDITSBUTTON: 'credits_button', 
+		MENUBG0: 'fd_menu_bg', MENUBG1: 'fd_menu_doll'
 	};
 	//
 	window.SCREEN = { 
@@ -51,15 +54,19 @@
 
 	function init() {
 		return new Promise(resolve => {
-			// starting forced modes. (see: window.MODES, js/modes.js && js/Game.js);
+			// setting initial screen;
+			game.sm.go(initialScreen);
+
+			// starting game modes. (see: window.MODES, js/modes.js && js/Game.js);
 			_.each(game.modes, m => {
 				game.mode[m].start();
 			});
+
 			// create screens here.
 			game.instantiate('menu', 'Menu');
-			createTestLevel();
-			//
-			game.sm.go(initialScreen); // initial screen here
+
+			// create levels here.
+			// createTestLevel();
 			//
 			resolve();
 		});
@@ -67,38 +74,38 @@
 
 	// Level creation example:
 
-	function createTestLevel() {
-		createPlayer();
-		createEnemy6();
-		//
-		game.sm.go(SCREEN.LEVEL1);
-	}
+	// function createTestLevel() {
+	// 	createPlayer();
+	// 	createEnemy6();
+	// 	//
+	// 	game.sm.go(SCREEN.LEVEL1);
+	// }
 
-	// Object creation here:
+	// // Object creation here:
 
-	function createEnemy6() {
-		const states = {};
-		const screens = [ SCREEN.LEVEL2, SCREEN.LEVEL3 ];
-		//
-		states[SPRITE.MOB6ATT] = { sprite: SPRITE.MOB6ATT, frames: 5, tpf: 250 };
-		//
-		const parameters = _.assign(options.enemy6, { states, screens });
-		//
-		game.instantiate(options.enemy6.id, options.enemy6.constructor, parameters);
-	}
+	// function createEnemy6() {
+	// 	const states = {};
+	// 	const screens = [ SCREEN.LEVEL2, SCREEN.LEVEL3 ];
+	// 	//
+	// 	states[SPRITE.MOB6ATT] = { sprite: SPRITE.MOB6ATT, frames: 5, tpf: 250 };
+	// 	//
+	// 	const parameters = _.assign(options.enemy6, { states, screens });
+	// 	//
+	// 	game.instantiate(options.enemy6.id, options.enemy6.constructor, parameters);
+	// }
 
-	function createPlayer() {
-		const states = {};
-		const screens = [ SCREEN.LEVEL1, SCREEN.LEVEL3 ];
-		//
-		states[SPRITE.PLAYERIDLE] = { sprite: SPRITE.PLAYERIDLE, frames: 2, tpf: 500 };
-		states[SPRITE.PLAYERRUN]  = { sprite: SPRITE.PLAYERIRUN, frames: 8, tpf: 125 };
-		states[SPRITE.PLAYERJUMP] = { sprite: SPRITE.PLAYERJUMP, frames: 1, tpf: 0 };
-		//
-		const parameters = _.assign(options.player, { states, screens });
-		//
-		game.instantiate(options.player.id, options.player.constructor, parameters);
-	}
+	// function createPlayer() {
+	// 	const states = {};
+	// 	const screens = [ SCREEN.LEVEL1, SCREEN.LEVEL3 ];
+	// 	//
+	// 	states[SPRITE.PLAYERIDLE] = { sprite: SPRITE.PLAYERIDLE, frames: 2, tpf: 500 };
+	// 	states[SPRITE.PLAYERRUN]  = { sprite: SPRITE.PLAYERIRUN, frames: 8, tpf: 125 };
+	// 	states[SPRITE.PLAYERJUMP] = { sprite: SPRITE.PLAYERJUMP, frames: 1, tpf: 0 };
+	// 	//
+	// 	const parameters = _.assign(options.player, { states, screens });
+	// 	//
+	// 	game.instantiate(options.player.id, options.player.constructor, parameters);
+	// }
 
 	//////////
 

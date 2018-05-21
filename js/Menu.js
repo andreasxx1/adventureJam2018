@@ -13,7 +13,7 @@
 					buttons: [
 						{ 
 							id: 'gameButton', 
-						  	index: 2, x: (game.width/2) - 50, y: (game.height/2) - 42.5,
+						  	index: 2, x: 550, y: 338,
 						  	states: {
 						  		'start_button': { sprite: 'start_button', frames: 1, tpf: 0 }
 						  	}, 
@@ -23,7 +23,7 @@
 						},
 						{ 
 							id: 'controlsButton', 
-						  	index: 2, x: (game.width/2) - 50, y: (game.height/2) - 12.5,
+						  	index: 2, x: 550, y: 385,
 						  	states: {
 						  		'controls_button': { sprite: 'controls_button', frames: 1, tpf: 0 }
 						  	}, 
@@ -33,7 +33,7 @@
 						},
 						{ 
 							id: 'creditsButton', 
-						  	index: 2, x: (game.width/2) - 50, y: (game.height/2) + 17.5,
+						  	index: 2, x: 550, y: 430,
 						  	states: {
 						  		'credits_button': { sprite: 'credits_button', frames: 1, tpf: 0 }
 						  	}, 
@@ -42,12 +42,19 @@
 						  	}
 						}
 					],
-					background: [
+					background: [ // layers
 						{
-							id: 'background',
-							index: -1, x: 0, y: 0, w: game.width, h: game.height, 
+							id: 'background_layer_0',
+							index: -2, x: 0, y: 0, w: game.width, h: game.height, 
 							states: {
 								'fd_menu_bg': { sprite: 'fd_menu_bg', frames: 1, tpf: 0 }
+							}
+						},
+						{
+							id: 'background_layer_1',
+							index: -1, x: 0, y: 0, 
+							states: {
+								'fd_menu_doll': { sprite: 'fd_menu_doll', frames: 1, tpf: 0 }
 							}
 						}
 					]
