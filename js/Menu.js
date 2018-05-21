@@ -42,7 +42,15 @@
 						  	}
 						}
 					],
-					background: null // ToDo background manager class.
+					background: [
+						{
+							id: 'background',
+							index: -1, x: 0, y: 0, w: game.width, h: game.height, 
+							states: {
+								'fd_menu_bg': { sprite: 'fd_menu_bg', frames: 1, tpf: 0 }
+							}
+						}
+					]
 				}
 				// {
 				// 	name: 'controls' // ToDo: controls screen
@@ -56,13 +64,6 @@
 			this.lastActiveScreen = null;
 			//
 			this.subscreenObjects = [];
-		}
-
-		draw() {
-			// Temporal background
-			game.context.fillStyle="#CCC";
-			game.context.fillRect(0, 0, game.width, game.height);
-			//
 		}
 
 		update() {
@@ -93,7 +94,11 @@
 					}));
 				});
 				// creating background
-				// ToDo.
+				_.each(options.background, layer => {
+					game.instantiate(layer.id, 'Background', _.assign(layer, {
+						screens: this.screens
+					}));
+				});
 			}
 		}
 
@@ -105,7 +110,9 @@
 					game.destroyObject(button.id);
 				});
 				// destroying background.
-				// ToDo.
+				_.each(options.background, layer => {
+					game.destroyObject(layer.id);
+				});
 			}
 		}
 

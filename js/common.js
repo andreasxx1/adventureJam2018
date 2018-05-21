@@ -2,9 +2,15 @@
 	'use strict';
 
 	// Here all the reusable functions like random, math, etc
-	window.common = { abs , round, pr, hexToRGB, removeElement, setCss };
+	window.common = { abs , round, pr, hexToRGB, removeElement, setCss, sortBy };
 
 	//////////
+
+	function sortBy(array, property) {
+	    return array.sort((a, b) => {
+	        return a[property] - b[property];
+	    });
+	}
 
 	function abs(val){
 		return val < 0 ? -val : val

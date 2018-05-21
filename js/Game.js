@@ -63,6 +63,7 @@
 
 		createObject(object) {
 			this.world.push(object);
+			//
 			this.reArrangeWorld();
 		}
 
@@ -92,12 +93,13 @@
 		}
 
 		reArrangeWorld() {
-			_.sortBy(this.world, a => {'index'});
+			common.sortBy(this.world, 'index');
 		}
 
 		load() {
 			return new Promise(resolve => {
-				const spriteNames = Object.keys(SPRITE).map(key => { return SPRITE[key]; });
+				const spriteNames = Object.keys(SPRITE).map(key => SPRITE[key]);
+				//
 				_.each(spriteNames, (spriteName, index) => {
 					if (!_.has(game.sprites, spriteName)){
 						game.sprites[spriteName] = new Image();

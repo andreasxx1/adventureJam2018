@@ -2,7 +2,8 @@
 	'use strict';
 
 	class GameObject {
-		constructor({ id, x, y, w, h, states, screens, index, constructor, isAbstract  }) { // constructor automatically added on game.instantiate function.
+		constructor({ id, x, y, w, h, states, screens, index, constructor, isAbstract }) { // constructor automatically added on game.instantiate function.
+			//
 			this.id = id || 'gameObject';
 			this.x = x || 0;
 			this.y = y || 0;
@@ -17,9 +18,16 @@
 			this.classConstructor = constructor; // Just a string with the constructor name in case needed (all constructors in game.constructors);
 			this.isRotated = false;
 			this.isAbstract = isAbstract || false; // Objects that aren't drawn
+			//
+			this.initialize(states);
 
+		}
+
+		//////////
+
+		initialize(states) {
 			// Setting states
-			if (states && !isAbstract) {
+			if (states && !this.isAbstract) {
 				_.each(Object.keys(states), name => {
 					this.states[name] = {
 						sprite: name,
@@ -32,16 +40,9 @@
 					}
 				});
 			}
-			//
-			this.initialize();
-
-		}
-
-		//////////
-
-		initialize() {
+			// Push gameobject into world.
 			game.createObject(this);
-			//
+			// Start animation.
 			if (this.states && !this.isAbstract) {
 				this.animate();
 			}

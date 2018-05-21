@@ -22,7 +22,7 @@
 	window.SPRITE = { 
 		PLAYERIDLE: 'player_idle', PLAYERRUN: 'player_run', PLAYERJUMP: 'player_jump', 
 		MOB6ATT: 'mob6attack',
-		STARTBUTTON: 'start_button', CONTROLSBUTTON: 'controls_button', CREDITSBUTTON: 'credits_button'
+		STARTBUTTON: 'start_button', CONTROLSBUTTON: 'controls_button', CREDITSBUTTON: 'credits_button', MENUBG: 'fd_menu_bg'
 	};
 	//
 	window.SCREEN = { 
