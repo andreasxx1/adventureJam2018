@@ -22,7 +22,7 @@
 	window.SPRITE = { 
 		PLAYERIDLE: 'player_idle', PLAYERRUN: 'player_run', PLAYERJUMP: 'player_jump', 
 		MOB6ATT: 'mob6attack',
-		STARTBUTTON: 'start_button'
+		STARTBUTTON: 'start_button', CONTROLSBUTTON: 'controls_button', CREDITSBUTTON: 'credits_button'
 	};
 	//
 	window.SCREEN = { 
@@ -57,6 +57,7 @@
 			});
 			// create screens here.
 			game.instantiate('menu', 'Menu');
+			createTestLevel();
 			//
 			game.sm.go(initialScreen); // initial screen here
 			//
@@ -66,38 +67,38 @@
 
 	// Level creation example:
 
-	// function createTestLevel(index) {
-	// 	createPlayer();
-	// 	createEnemy6();
-	// 	//
-	// 	game.sm.go(SCREEN.LEVEL1);
-	// }
+	function createTestLevel() {
+		createPlayer();
+		createEnemy6();
+		//
+		game.sm.go(SCREEN.LEVEL1);
+	}
 
-	// // Object creation here:
+	// Object creation here:
 
-	// function createEnemy6() {
-	// 	const states = {};
-	// 	const screens = [ SCREEN.LEVEL2, SCREEN.LEVEL3 ];
-	// 	//
-	// 	states[SPRITE.MOB6ATT] = { sprite: SPRITE.MOB6ATT, frames: 5, tpf: 250 };
-	// 	//
-	// 	const parameters = _.assign(options.enemy6, { states, screens });
-	// 	//
-	// 	game.instantiate(options.enemy6.id, options.enemy6.constructor, parameters);
-	// }
+	function createEnemy6() {
+		const states = {};
+		const screens = [ SCREEN.LEVEL2, SCREEN.LEVEL3 ];
+		//
+		states[SPRITE.MOB6ATT] = { sprite: SPRITE.MOB6ATT, frames: 5, tpf: 250 };
+		//
+		const parameters = _.assign(options.enemy6, { states, screens });
+		//
+		game.instantiate(options.enemy6.id, options.enemy6.constructor, parameters);
+	}
 
-	// function createPlayer() {
-	// 	const states = {};
-	// 	const screens = [ SCREEN.LEVEL1, SCREEN.LEVEL3 ];
-	// 	//
-	// 	states[SPRITE.PLAYERIDLE] = { sprite: SPRITE.PLAYERIDLE, frames: 2, tpf: 500 };
-	// 	states[SPRITE.PLAYERRUN]  = { sprite: SPRITE.PLAYERIRUN, frames: 8, tpf: 125 };
-	// 	states[SPRITE.PLAYERJUMP] = { sprite: SPRITE.PLAYERJUMP, frames: 1, tpf: 0 };
-	// 	//
-	// 	const parameters = _.assign(options.player, { states, screens });
-	// 	//
-	// 	game.instantiate(options.player.id, options.player.constructor, parameters);
-	// }
+	function createPlayer() {
+		const states = {};
+		const screens = [ SCREEN.LEVEL1, SCREEN.LEVEL3 ];
+		//
+		states[SPRITE.PLAYERIDLE] = { sprite: SPRITE.PLAYERIDLE, frames: 2, tpf: 500 };
+		states[SPRITE.PLAYERRUN]  = { sprite: SPRITE.PLAYERIRUN, frames: 8, tpf: 125 };
+		states[SPRITE.PLAYERJUMP] = { sprite: SPRITE.PLAYERJUMP, frames: 1, tpf: 0 };
+		//
+		const parameters = _.assign(options.player, { states, screens });
+		//
+		game.instantiate(options.player.id, options.player.constructor, parameters);
+	}
 
 	//////////
 

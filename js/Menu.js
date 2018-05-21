@@ -12,23 +12,43 @@
 				'main': { 
 					buttons: [
 						{ 
-							id: 'newGameButton', 
-						  	index: 2, x: 0, y: 0,
+							id: 'gameButton', 
+						  	index: 2, x: (game.width/2) - 50, y: (game.height/2) - 42.5,
 						  	states: {
 						  		'start_button': { sprite: 'start_button', frames: 1, tpf: 0 }
 						  	}, 
 						  	callback: () => { 
-						  		console.log('new game'); 
+						  		console.log('start game'); 
+						  	}
+						},
+						{ 
+							id: 'controlsButton', 
+						  	index: 2, x: (game.width/2) - 50, y: (game.height/2) - 12.5,
+						  	states: {
+						  		'controls_button': { sprite: 'controls_button', frames: 1, tpf: 0 }
+						  	}, 
+						  	callback: () => { 
+						  		console.log('controls'); 
+						  	}
+						},
+						{ 
+							id: 'creditsButton', 
+						  	index: 2, x: (game.width/2) - 50, y: (game.height/2) + 17.5,
+						  	states: {
+						  		'credits_button': { sprite: 'credits_button', frames: 1, tpf: 0 }
+						  	}, 
+						  	callback: () => { 
+						  		console.log('credits'); 
 						  	}
 						}
 					],
 					background: null // ToDo background manager class.
 				}
 				// {
-				// 	name: 'controls'
+				// 	name: 'controls' // ToDo: controls screen
 				// },
 				// {
-				// 	name: 'credits'
+				// 	name: 'credits' // ToDo: credits screen
 				// }
 			};
 			//

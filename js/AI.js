@@ -51,6 +51,8 @@
 			
 			this.isCollidingPlayer();
 
+			this.jump();
+
 			//update positions
 			{
 			let {x, y} = this.move(this.id);

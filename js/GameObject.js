@@ -80,7 +80,7 @@
 
 		update() {
 			if (this.isActive && (this.activeState || this.isAbstract)) {
-				
+
 			}
 		}
 
@@ -102,7 +102,6 @@
 				if (this.activeState.sprite !== state) {
 					this.activeState = this.states[state];
 					this.animate();
-					console.log("this.activeState:", this.activeState);
 				}
 			} else {
 				throw 'Error: trying to set state: ' + state + ', but is: ' + this.states[state];
