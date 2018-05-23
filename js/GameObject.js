@@ -16,7 +16,7 @@
 			this.isVisible = true; 	 // Affects object visibility.
 			this.isActive = true; 	 // Affects object interaction with the world.
 			this.activeState = null;
-			this.classConstructor = constructor; // Just a string with the constructor name in case needed (all constructors in game.constructors);
+			this.class = constructor; // Just a string with the constructor name in case needed (all constructors in game.constructors);
 			this.isRotated = false;
 			this.isAbstract = isAbstract || false; // Objects that aren't drawn
 			//

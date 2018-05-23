@@ -13,11 +13,18 @@
 			this.sm = new ScreenManager(); // Class below
 			this.modes = window.MODES; // active modes (see modes in js/modes.js and GameInit.js -> window.MODES).
  			this.callbacks = {};
+ 			this.isRunning = false;
 		}
 
 		start() {
+			this.isRunning = true;
+			//
 			this.update();
 			this.draw();
+		}
+
+		pause() {
+			this.isRunning = false;
 		}
 
 		// ToDo: clean draw and update functions.
@@ -26,7 +33,9 @@
 			this.updateObjectStatus(); // set isActive flag.
 			this.execCallbacks('update'); // Injected functions for updating (to inject function use pushCallback);
 			this.execFunctionOnActiveObjects('update');
-			setTimeout(() => { this.update(); }, 1000/60); // 1000/60 = 60 frames per seconds.
+			setTimeout(() => { 
+				if (this.isRunning) this.update(); 
+			}, 1000/60); // 1000/60 = 60 frames per seconds.
 		}
 
 		draw() {
@@ -34,7 +43,9 @@
 			this.execCallbacks('draw'); // Injected functions for drawing (to inject function use pushCallback)
 			this.execFunctionOnActiveObjects('draw');
 			this.execFunctionOnActiveObjects('drawOnMiniMap');
-			requestAnimFrame(() => { this.draw(); }); // requestAnimFrame uses delta time and adapts the frame rate for a smooth drawing.
+			requestAnimFrame(() => { 
+				if (this.isRunning) this.draw(); 
+			}); // requestAnimFrame uses delta time and adapts the frame rate for a smooth drawing.
 		}
 
 		instantiate(name, constructorName, ...args) {
@@ -61,14 +72,14 @@
 			this.callbacks[cName] = callback;
 		}
 
+		apply(id, parameter, value) { // object id, parameter name, parameter value, by example: apply('enemy', 'isAlive', false);
+			this.getWorldObjectById(id)[parameter] = value;
+		}
+
 		createObject(object) {
 			this.world.push(object);
 			//
 			this.reArrangeWorld();
-		}
-
-		apply(id, parameter, value) { // object id, parameter name, parameter value, by example: apply('enemy', 'isAlive', false);
-			this.getWorldObjectById(id)[parameter] = value;
 		}
 
 		destroyObject(id) {

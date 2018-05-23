@@ -14,10 +14,10 @@
 				this.jp = 0;
 
 				this.vals = {
-					walkSpeed: 10,
-					runSpeed: 30,
-					jumpHeight: 200,
-					dashDist: 100
+					walkSpeed: 20,
+					runSpeed: 35,
+					jumpHeight: 180,
+					dashDist: 500
 				}
 				this.move = phy.addToPhysicalWorld({
 					gameObj: this,

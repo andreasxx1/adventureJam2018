@@ -23,8 +23,11 @@
 		start() {
 			this.setGameVersionDisplay(GAME_VERSION);
 			this.setOptionsDisplay();
+			this.setInputsDisplay();
 			this.setScreenButtonsDisplay();
 			this.setDrawCollidersCallback();
+			this.setRestartGameButton();
+			this.setPauseButton();
 		}
 
 		drawColliders() {
@@ -32,14 +35,16 @@
 				const gameWorld = Object.keys(game.world).map(key => { return game.world[key] });
 
 				_.each(gameWorld, gameObject => {
-					const physicalObject = game.getPhysicalObjectById(gameObject.id);
-					//
-					if (gameObject.isActive && physicalObject && physicalObject.weight !== -1) {
-						let alpha = game.context.globalAlpha
-						game.context.globalAlpha = 0.3;
-						game.context.fillStyle ="#FFB6C1";
-						game.context.fillRect(physicalObject.pos.x, physicalObject.pos.y, physicalObject.dim.x, physicalObject.dim.y);
-						game.context.globalAlpha = alpha;
+					if (gameObject.isActive) {
+						const physicalObject = game.getPhysicalObjectById(gameObject.id);
+						//
+						if (physicalObject && physicalObject.weight !== -1) {
+							let alpha = game.context.globalAlpha
+							game.context.globalAlpha = 0.3;
+							game.context.fillStyle ="#FFB6C1";
+							game.context.fillRect(physicalObject.pos.x, physicalObject.pos.y, physicalObject.dim.x, physicalObject.dim.y);
+							game.context.globalAlpha = alpha;
+						}
 					}
 				});
 			}
@@ -80,7 +85,7 @@
 		setOptionsDisplay() {
 			const area = document.getElementById("options");
 			//
-			area.appendChild(document.createTextNode("development options: "));
+			area.appendChild(document.createTextNode("options: "));
 			area.innerHTML = area.innerHTML.bold();
 			//
 			_.each(Object.keys(options.modes.dev), (key, index) => {
@@ -104,8 +109,71 @@
 			});
 		}
 
+		setInputsDisplay() {
+			const area = document.getElementById("input-area");
+			const inputs = [
+				{ id:'player', prefixes: ['vals'], parameter: 'walkSpeed', display: 'player: walk speed.' }
+			];
+			// 
+			area.appendChild(document.createTextNode("Inputs: "));
+			area.innerHTML = area.innerHTML.bold();
+			//
+			_.each(inputs, data => {
+				// 
+				area.appendChild(document.createElement("SPAN").appendChild(document.createElement("br")));
+				// 
+				const input = document.createElement("INPUT");
+				const label = document.createElement("SPAN");
+				//
+				label.appendChild(document.createTextNode(data.display));
+				//
+				let wObject = game.getWorldObjectById(data.id);
+				let pObject = game.getPhysicalObjectById(data.id);
+				//
+				_.each(data.prefixes, prefix => {
+					wObject = wObject[prefix];
+				});
+				//
+				input.value = wObject[data.parameter];
+				input.addEventListener("change", e => {
+					wObject[data.parameter] = parseInt(input.value);
+				});
+				// 
+				area.appendChild(input);
+				area.appendChild(label);
+			});
+		}
+
 		setDrawCollidersCallback() {
 			game.pushCallback('draw', this.drawColliders);
+		}
+
+		setRestartGameButton() {
+			// const area = document.getElementById("restart");
+			// const button = document.createElement("BUTTON"); // restart button.
+			// //
+			// button.appendChild(document.createTextNode("RESTART"));
+			// button.addEventListener("click", () => {
+
+			// });
+			// //
+			// area.appendChild(button);
+		}
+
+		setPauseButton() {
+			const area = document.getElementById("pause");
+			const button = document.createElement("BUTTON"); // restart button.
+			//
+			button.appendChild(document.createTextNode("PAUSE"));
+			button.addEventListener("click", () => {
+				if (game.isRunning) {
+					game.pause();
+				} else {
+					game.start();
+				}
+			});
+			//
+			area.appendChild(button);
 		}
 
 		updateDisplay(isUpdated) {
