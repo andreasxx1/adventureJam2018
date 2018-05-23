@@ -42,8 +42,8 @@
 			}
 			// Push gameobject into world.
 			game.createObject(this);
-			// Start animation.
-			if (this.states && !this.isAbstract) {
+			//
+			if (this.states.length > 0 && !this.isAbstract) {
 				this.animate();
 			}
 		}

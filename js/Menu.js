@@ -13,30 +13,33 @@
 					buttons: [
 						{ 
 							id: 'gameButton', 
-						  	index: 2, x: 550, y: 338,
-						  	states: {
-						  		'start_button': { sprite: 'start_button', frames: 1, tpf: 0 }
-						  	}, 
+						  	index: 2, x: (game.width/3)*2 - 92, y: (game.height/2) + 40,
+						  	// states: {
+						  	// 	'start_button': { sprite: 'start_button', frames: 1, tpf: 0 }
+						  	// }, 
+						  	text: 'NEW GAME',
 						  	callback: () => { 
 						  		console.log('start game'); 
 						  	}
 						},
 						{ 
 							id: 'controlsButton', 
-						  	index: 2, x: 550, y: 385,
-						  	states: {
-						  		'controls_button': { sprite: 'controls_button', frames: 1, tpf: 0 }
-						  	}, 
+						  	index: 2, x: (game.width/3)*2 - 92, y: (game.height/2) + 87,
+						  	// states: {
+						  	// 	'controls_button': { sprite: 'controls_button', frames: 1, tpf: 0 }
+						  	// }, 
+						  	text: 'CONTROLS',
 						  	callback: () => { 
 						  		console.log('controls'); 
 						  	}
 						},
 						{ 
 							id: 'creditsButton', 
-						  	index: 2, x: 550, y: 430,
-						  	states: {
-						  		'credits_button': { sprite: 'credits_button', frames: 1, tpf: 0 }
-						  	}, 
+						  	index: 2, x: (game.width/3)*2 - 92, y: (game.height/2) + 135,
+						  	// states: {
+						  	// 	'credits_button': { sprite: 'credits_button', frames: 1, tpf: 0 }
+						  	// }, 
+						  	text: 'CREDITS',
 						  	callback: () => { 
 						  		console.log('credits'); 
 						  	}
