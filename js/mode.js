@@ -30,15 +30,15 @@
 		drawColliders() {
 			if (options.modes.dev.drawColliders) {
 				const gameWorld = Object.keys(game.world).map(key => { return game.world[key] });
-				const physicsWorld = game.phy.getPhysicalWorld();
-				const objects = (gameWorld).concat(physicsWorld);
-				//
-				_.each(objects, obj => {
-					if (obj.weight === -1 || obj.isActive) {
+
+				_.each(gameWorld, gameObject => {
+					const physicalObject = game.getPhysicalObjectById(gameObject.id);
+					//
+					if (gameObject.isActive && physicalObject && physicalObject.weight !== -1) {
 						let alpha = game.context.globalAlpha
 						game.context.globalAlpha = 0.3;
 						game.context.fillStyle ="#FFB6C1";
-						game.context.fillRect((obj.pos ? obj.pos.x : obj.x), (obj.pos ? obj.pos.y : obj.y), (obj.dim ? obj.dim.x : obj.width), (obj.dim ? obj.dim.y : obj.height));
+						game.context.fillRect(physicalObject.pos.x, physicalObject.pos.y, physicalObject.dim.x, physicalObject.dim.y);
 						game.context.globalAlpha = alpha;
 					}
 				});
@@ -47,7 +47,7 @@
 
 		setScreenButtonsDisplay() {
 			const area = document.getElementById("button-area");
-			area.innerHTML = "Screens: ".bold();
+			area.innerHTML = "Screen selection: ".bold();
 			//
 			_.each(Object.values(SCREEN), screen => {
 				// Creating button in HTML.
@@ -109,13 +109,12 @@
 		}
 
 		updateDisplay(isUpdated) {
-			const menuButtons = game.getWorldObjectsByGroup('menuButton');
+			const buttons = game.getWorldObjectsByGroup('button');
 			const backgrounds = game.getWorldObjectsByGroup('background');
 			switch(isUpdated) {
 			    case "displayVersion": if (options.modes.dev.displayVersion) {  common.setCss("version", "display", ""); } else { common.setCss("version", "display", "none"); } break;
-			    case "displayScreenButtons": if (options.modes.dev.displayScreenButtons) { common.setCss("button-area", "display", ""); } else { common.setCss("button-area", "display", "none"); }	 break;
-			    case "displayDoll": if (options.modes.dev.displayDoll) { game.apply('background_layer_1', 'isVisible', true); } else { game.apply('background_layer_1', 'isVisible', false); } break;
-			    case "displayMenuButtons": if (options.modes.dev.displayMenuButtons) { _.each(menuButtons, button => { button.isVisible = true }); } else { _.each(menuButtons, button => { button.isVisible = false }); } break;
+			    case "displayScreenSelection": if (options.modes.dev.displayScreenSelection) { common.setCss("button-area", "display", ""); } else { common.setCss("button-area", "display", "none"); }	 break;
+			    case "displayIngameButtons": if (options.modes.dev.displayIngameButtons) { _.each(buttons, button => { button.isVisible = true }); } else { _.each(buttons, button => { button.isVisible = false }); } break;
 			    case "displayBackgrounds": if (options.modes.dev.displayBackgrounds) { _.each(backgrounds, background => { background.isVisible = true }); } else { _.each(backgrounds, background => { background.isVisible = false }); } break;
 			    default: break;
 			}

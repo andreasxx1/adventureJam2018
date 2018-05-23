@@ -12,7 +12,7 @@
 				'main': { 
 					buttons: [
 						{ 
-							id: 'gameButton', group: "menuButton", 
+							id: 'gameButton', group: "button", 
 						  	index: 2, x: (game.width/3)*2 - 92, y: (game.height/2) + 40,
 						  	// states: {
 						  	// 	'start_button': { sprite: 'start_button', frames: 1, tpf: 0 }
@@ -23,7 +23,7 @@
 						  	}
 						},
 						{ 
-							id: 'controlsButton', group: "menuButton", 
+							id: 'controlsButton', group: "button", 
 						  	index: 2, x: (game.width/3)*2 - 92, y: (game.height/2) + 87,
 						  	// states: {
 						  	// 	'controls_button': { sprite: 'controls_button', frames: 1, tpf: 0 }
@@ -34,7 +34,7 @@
 						  	}
 						},
 						{ 
-							id: 'creditsButton', group: "menuButton", 
+							id: 'creditsButton', group: "button", 
 						  	index: 2, x: (game.width/3)*2 - 92, y: (game.height/2) + 135,
 						  	// states: {
 						  	// 	'credits_button': { sprite: 'credits_button', frames: 1, tpf: 0 }

@@ -14,7 +14,7 @@
 	}());
 	//
 	window.KEY = { SP: 32, LE: 37, UP: 38, RI: 39, DO: 40, A: 65, D: 68, X: 88 };
-	window.GAME_VERSION = "0.0.5-beta";
+	window.GAME_VERSION = "0.0.6-beta";
 	window.ASSETS_FOLDER = 'assets/';
 	window.SPRITE_FORMAT = '.png';
 	window.MODES = ['dev']; // forced modes on game.init;
@@ -35,7 +35,7 @@
 	//
 	window.options = {
 		modes: {
-			dev: { displayVersion: true, drawColliders: true, displayScreenButtons: true, displayDoll: true, displayMenuButtons: true, displayBackgrounds: true }
+			dev: { displayVersion: true, displayScreenSelection: true, displayIngameButtons: true, displayBackgrounds: true, drawColliders: true }
 		},
 		player: { id: 'player', constructor: 'Player', index: 0, w: 50, h: 105  },
 		enemy6: { id: 'enemy6', constructor: 'Enemy6', index: 1, w: 655/5, h: 103 }

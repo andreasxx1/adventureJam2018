@@ -96,6 +96,10 @@
 			return isObject && isIndex ? [object, index] : (isIndex ? index : (isObject ? object : null))  ;
 		}
 
+		getPhysicalObjectById(id) {
+			return game.phy.getPhysicalWorld().find(object => { return object.id === id });
+		}
+
 		getWorldObjectsByConstructor(constructor) {
 			const objects = [];
 			for (let i = 0; i < this.world.length; i++) {

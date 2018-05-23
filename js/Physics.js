@@ -105,30 +105,30 @@
           h: 10000,
           weight: -1
         }),
-        new Collider({
-          id: 'left-wall',
-          x: -10000,
-          y: game.height - 5000,
-          w: 10000,
-          h: 10000,
-          weight: -1
-        }),
-        new Collider({
-          id: 'platform-2',
-          x: 700,
-          y: 0,
-          w: 100,
-          h: game.height,
-          weight: -1
-        }),
-        new Collider({
-          id: 'platform',
-          x: 0,
-          y: game.height -100,
-          w: 100,
-          h: 100,
-          weight: -1
-        })
+        // new Collider({
+        //   id: 'left-wall',
+        //   x: -10000,
+        //   y: game.height - 5000,
+        //   w: 10000,
+        //   h: 10000,
+        //   weight: -1
+        // }),
+        // new Collider({
+        //   id: 'platform-2',
+        //   x: 700,
+        //   y: 0,
+        //   w: 100,
+        //   h: game.height,
+        //   weight: -1
+        // }),
+        // new Collider({
+        //   id: 'platform',
+        //   x: 0,
+        //   y: game.height -100,
+        //   w: 100,
+        //   h: 100,
+        //   weight: -1
+        // })
       ]
     }
     addToPhysicalWorld({gameObj, x, y, w, h, weight}){
