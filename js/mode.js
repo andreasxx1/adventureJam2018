@@ -90,13 +90,13 @@
 				const optionCheck = document.createElement("INPUT");
 				const optionLabel = document.createElement("SPAN");
 				//
-				optionLabel.appendChild(document.createTextNode(key));
+				optionLabel.appendChild(document.createTextNode(common.firstToUppercase(common.uncamelize(key))));
 				//
 				optionCheck.type = "checkbox";
 				optionCheck.checked = options.modes.dev[key];
 				optionCheck.addEventListener("click", () => {
 					options.modes.dev[key] = !options.modes.dev[key];
-					this.updateElementsDisplay();
+					this.updateDisplay(key);
 				});
 				area.appendChild(optionCheck);
 				area.appendChild(optionLabel);
@@ -108,9 +108,17 @@
 			game.pushCallback('draw', this.drawColliders);
 		}
 
-		updateElementsDisplay() {
-			if (options.modes.dev.displayVersion) { common.setCss("version", "display", "") } else { common.setCss("version", "display", "none"); }
-			if (options.modes.dev.displayScreenButtons) { common.setCss("button-area", "display", ""); } else { common.setCss("button-area", "display", "none"); }
+		updateDisplay(isUpdated) {
+			const menuButtons = game.getWorldObjectsByGroup('menuButton');
+			const backgrounds = game.getWorldObjectsByGroup('background');
+			switch(isUpdated) {
+			    case "displayVersion": if (options.modes.dev.displayVersion) {  common.setCss("version", "display", ""); } else { common.setCss("version", "display", "none"); } break;
+			    case "displayScreenButtons": if (options.modes.dev.displayScreenButtons) { common.setCss("button-area", "display", ""); } else { common.setCss("button-area", "display", "none"); }	 break;
+			    case "displayDoll": if (options.modes.dev.displayDoll) { game.apply('background_layer_1', 'isVisible', true); } else { game.apply('background_layer_1', 'isVisible', false); } break;
+			    case "displayMenuButtons": if (options.modes.dev.displayMenuButtons) { _.each(menuButtons, button => { button.isVisible = true }); } else { _.each(menuButtons, button => { button.isVisible = false }); } break;
+			    case "displayBackgrounds": if (options.modes.dev.displayBackgrounds) { _.each(backgrounds, background => { background.isVisible = true }); } else { _.each(backgrounds, background => { background.isVisible = false }); } break;
+			    default: break;
+			}
 		}
 
 	}

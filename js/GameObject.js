@@ -2,7 +2,7 @@
 	'use strict';
 
 	class GameObject {
-		constructor({ id, x, y, w, h, states, screens, index, constructor, isAbstract }) { // constructor automatically added on game.instantiate function.
+		constructor({ id, x, y, w, h, states, screens, index, constructor, isAbstract, group }) { // constructor automatically added on game.instantiate function.
 			//
 			this.id = id || 'gameObject';
 			this.x = x || 0;
@@ -12,6 +12,7 @@
 			this.screens = screens; // screens where the object will be active [array].
 			this.states = [];
 			this.index = index || index === 0 ? index : -1; // Drawing index (the bigger the closer).
+			this.group = group || null;
 			this.isVisible = true; 	 // Affects object visibility.
 			this.isActive = true; 	 // Affects object interaction with the world.
 			this.activeState = null;

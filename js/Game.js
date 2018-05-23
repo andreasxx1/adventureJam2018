@@ -67,6 +67,10 @@
 			this.reArrangeWorld();
 		}
 
+		apply(id, parameter, value) { // object id, parameter name, parameter value, by example: apply('enemy', 'isAlive', false);
+			this.getWorldObjectById(id)[parameter] = value;
+		}
+
 		destroyObject(id) {
 			const index = this.getWorldObjectById(id, true, false);
 			//
@@ -77,7 +81,7 @@
 			this.reArrangeWorld();
 		}
 
-		getWorldObjectById(id, isIndex=false, isObject=true) {
+		getWorldObjectById(id, isIndex=false, isObject=true) { // first one find by that id (id must by unique anyway).
 			let index = null;
 			let object = null;
 			//
@@ -90,6 +94,26 @@
 			}
 			//
 			return isObject && isIndex ? [object, index] : (isIndex ? index : (isObject ? object : null))  ;
+		}
+
+		getWorldObjectsByConstructor(constructor) {
+			const objects = [];
+			for (let i = 0; i < this.world.length; i++) {
+				if (this.world[i].classConstructor === constructor) {
+					objects.push(this.world[i]);
+				}
+			}
+			return objects;
+		}
+
+		getWorldObjectsByGroup(group) {
+			const objects = [];
+			for (let i = 0; i < this.world.length; i++) {
+				if (this.world[i].group === group) {
+					objects.push(this.world[i]);
+				}
+			}
+			return objects;
 		}
 
 		reArrangeWorld() {

@@ -2,7 +2,7 @@
 	'use strict';
 
 	// Here all the reusable functions like random, math, etc
-	window.common = { abs , round, pr, hexToRGB, removeElement, setCss, sortBy };
+	window.common = { abs , round, pr, hexToRGB, removeElement, setCss, sortBy, uncamelize, firstToUppercase };
 
 	//////////
 
@@ -41,6 +41,14 @@
 
 	function setCss(id, property, value) {
 		document.getElementById(id).style[property] = value;
+	}
+
+	function uncamelize(text, separator=" ") {
+		return (text.replace(/[A-Z]/g, letter => { return separator + letter.toLowerCase(); })).replace("/^" + separator + "/", '');
+	}
+
+	function firstToUppercase(str) {
+	    return str.charAt(0).toUpperCase() + str.slice(1);
 	}
 
 })();
