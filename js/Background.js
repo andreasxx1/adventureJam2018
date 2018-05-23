@@ -7,7 +7,7 @@
 		constructor({ id, screens, index, states, constructor }){
 			super({ id, screens, index, states, constructor });
 
-			// ToDo: layer manager, in order to manage different background layers with different attributes.
+			// ToDo: layer manager, different layers with different attributes (effects).
 		}
 	}
 

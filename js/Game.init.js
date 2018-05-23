@@ -35,7 +35,7 @@
 	//
 	window.options = {
 		modes: {
-			dev: { displayVersion: true, drawColliders: true, displayScreenButtons: true }
+			dev: { displayVersion: true, drawColliders: true, displayScreenButtons: true, displayDoll: true, displayMenuButtons: true }
 		},
 		player: { id: 'player', constructor: 'Player', index: 0, w: 50, h: 105  },
 		enemy6: { id: 'enemy6', constructor: 'Enemy6', index: 1, w: 655/5, h: 103 }
@@ -56,56 +56,53 @@
 		return new Promise(resolve => {
 			// setting initial screen;
 			game.sm.go(initialScreen);
+			// create screens here.
+			game.instantiate('menu', 'Menu');
+
+			// create levels here.
+			createTestLevel();
 
 			// starting game modes. (see: window.MODES, js/modes.js && js/Game.js);
 			_.each(game.modes, m => {
 				game.mode[m].start();
 			});
-
-			// create screens here.
-			game.instantiate('menu', 'Menu');
-
-			// create levels here.
-			// createTestLevel();
-			//
+			// nothing here please, everything above game modes startup.
 			resolve();
 		});
 	}
 
 	// Level creation example:
 
-	// function createTestLevel() {
-	// 	createPlayer();
-	// 	createEnemy6();
-	// 	//
-	// 	game.sm.go(SCREEN.LEVEL1);
-	// }
+	function createTestLevel() {
+		createPlayer();
+		createEnemy6();
+	}
 
-	// // Object creation here:
+	// Object creation here:
 
-	// function createEnemy6() {
-	// 	const states = {};
-	// 	const screens = [ SCREEN.LEVEL2, SCREEN.LEVEL3 ];
-	// 	//
-	// 	states[SPRITE.MOB6ATT] = { sprite: SPRITE.MOB6ATT, frames: 5, tpf: 250 };
-	// 	//
-	// 	const parameters = _.assign(options.enemy6, { states, screens });
-	// 	//
-	// 	game.instantiate(options.enemy6.id, options.enemy6.constructor, parameters);
-	// }
+	function createEnemy6() {
+		const states = {};
+		const screens = [ SCREEN.LEVEL2, SCREEN.LEVEL3 ];
+		//
+		states[SPRITE.MOB6ATT] = { sprite: SPRITE.MOB6ATT, frames: 5, tpf: 250 };
+		//
+		const parameters = _.assign(options.enemy6, { states, screens });
+		//
+		game.instantiate(options.enemy6.id, options.enemy6.constructor, parameters);
+	}
 
-	// function createPlayer() {
-	// 	const states = {};
-	// 	const screens = [ SCREEN.LEVEL1, SCREEN.LEVEL3 ];
-	// 	//
-	// 	states[SPRITE.PLAYERIDLE] = { sprite: SPRITE.PLAYERIDLE, frames: 2, tpf: 500 };
-	// 	states[SPRITE.PLAYERRUN]  = { sprite: SPRITE.PLAYERIRUN, frames: 8, tpf: 125 };
-	// 	states[SPRITE.PLAYERJUMP] = { sprite: SPRITE.PLAYERJUMP, frames: 1, tpf: 0 };
-	// 	//
-	// 	const parameters = _.assign(options.player, { states, screens });
-	// 	//
-	// 	game.instantiate(options.player.id, options.player.constructor, parameters);
-	// }
+	function createPlayer() {
+		const states = {};
+		const screens = [ SCREEN.LEVEL1, SCREEN.LEVEL3 ];
+		//
+		states[SPRITE.PLAYERIDLE] = { sprite: SPRITE.PLAYERIDLE, frames: 2, tpf: 500 };
+		states[SPRITE.PLAYERRUN]  = { sprite: SPRITE.PLAYERIRUN, frames: 8, tpf: 125 };
+		states[SPRITE.PLAYERJUMP] = { sprite: SPRITE.PLAYERJUMP, frames: 1, tpf: 0 };
+		//
+		const parameters = _.assign(options.player, { states, screens });
+		//
+		game.instantiate(options.player.id, options.player.constructor, parameters);
+	}
 
 	//////////
 

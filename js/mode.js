@@ -109,8 +109,11 @@
 		}
 
 		updateElementsDisplay() {
+			const menuButtons = game.getWorldObjectsByGroup('menuButton');
 			if (options.modes.dev.displayVersion) { common.setCss("version", "display", "") } else { common.setCss("version", "display", "none"); }
 			if (options.modes.dev.displayScreenButtons) { common.setCss("button-area", "display", ""); } else { common.setCss("button-area", "display", "none"); }
+			if (options.modes.dev.displayDoll) { game.apply('background_layer_1', 'isVisible', true); } else { game.apply('background_layer_1', 'isVisible', false); }
+			if (options.modes.dev.displayMenuButtons) { _.each(menuButtons, button => { button.isVisible = true }); } else { _.each(menuButtons, button => { button.isVisible = false }); }
 		}
 
 	}
