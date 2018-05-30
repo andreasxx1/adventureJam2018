@@ -92,7 +92,7 @@
 			// create screens here.
 			game.instantiate('menu', 'Menu');
 			// create levels here.
-			// game.createTestLevel();
+			game.createTestLevel();
 			//
 			resolve();
 		});
