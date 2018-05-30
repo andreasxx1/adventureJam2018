@@ -112,7 +112,8 @@
 		setInputsDisplay() {
 			const area = document.getElementById("input-area");
 			const inputs = [
-				{ id:'player', prefixes: ['vals'], parameter: 'walkSpeed', display: 'player: walk speed.' }
+				{ id:'player', prefixes: ['vals'], parameter: 'walkSpeed', display: 'player: walk speed.' },
+				{ id:'player', prefixes: ['vals'], parameter: 'jumpHeight', display: 'player: jump strength.' }
 			];
 			// 
 			area.appendChild(document.createTextNode("Inputs: "));
@@ -128,19 +129,21 @@
 				label.appendChild(document.createTextNode(data.display));
 				//
 				let wObject = game.getWorldObjectById(data.id);
-				let pObject = game.getPhysicalObjectById(data.id);
+				// let pObject = game.getPhysicalObjectById(data.id);
 				//
-				_.each(data.prefixes, prefix => {
-					wObject = wObject[prefix];
-				});
-				//
-				input.value = wObject[data.parameter];
-				input.addEventListener("change", e => {
-					wObject[data.parameter] = parseInt(input.value);
-				});
-				// 
-				area.appendChild(input);
-				area.appendChild(label);
+				if (wObject) {
+					_.each(data.prefixes, prefix => {
+						wObject = wObject[prefix];
+					});
+					//
+					input.value = wObject[data.parameter];
+					input.addEventListener("change", e => {
+						wObject[data.parameter] = parseInt(input.value);
+					});
+					// 
+					area.appendChild(input);
+					area.appendChild(label);
+				}
 			});
 		}
 

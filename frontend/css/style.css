@@ -2,7 +2,7 @@ canvas { background-color: #777; }
 #options { position: absolute; float: left; left: 975px; top: 5px; }
 #version { position: absolute; color: white; top: 10px; left: 12.5px; }
 #input-area { position: absolute; float: left; left: 975px; top: 140px; }
-#input-area > * { margin-left: 5px; }
+#input-area > * { margin: 5px 0 0 5px; }
 #restart { position: absolute; float: left; left: 975px; top: 250px; }
 #pause { position: absolute; float: left; left: 975px; top: 280px; }
 

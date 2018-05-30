@@ -88,11 +88,11 @@
 	game.init = () => {
 		return new Promise(resolve => {
 			// setting initial screen;
-			// game.sm.go(initialScreen);
+			game.sm.go(initialScreen);
 			// create screens here.
 			game.instantiate('menu', 'Menu');
 			// create levels here.
-			game.createTestLevel();
+			// game.createTestLevel();
 			//
 			resolve();
 		});
